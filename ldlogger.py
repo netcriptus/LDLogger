@@ -86,18 +86,19 @@ def main(argv):
     output.write("\n")
     
   # Getting IE toolbars
-  output.write("\n\t#===== IE Toolbars =====#\n\n")
   source_reg = {"key": "HKEY_LOCAL_MACHINE",
                 "subkey": "SOFTWARE\Microsoft\Internet Explorer\Toolbar"}
   target_reg = {"key": "HKEY_CLASSES_ROOT",
                 "subkey": "CLSID\%s\InprocServer32"}
   IEToolbars = processes.getComponents(source_reg, target_reg, as_subkeys=False)
-  for toolbar in IEToolbars:
-    output.write("Key: %s\n" % toolbar["subkey"])
-    output.write("Object Name: %s\n" % toolbar["objname"])
-    output.write("Path to executable: %s\n" % toolbar["exepath"])
-    output.write("-"*50)
-    output.write("\n")
+  if IEToolbars:
+    output.write("\n\t#===== IE Toolbars =====#\n\n")
+    for toolbar in IEToolbars:
+      output.write("Key: %s\n" % toolbar["subkey"])
+      output.write("Object Name: %s\n" % toolbar["objname"])
+      output.write("Path to executable: %s\n" % toolbar["exepath"])
+      output.write("-"*50)
+      output.write("\n")
     
   # Getting startups:
   global_startups, user_startups = processes.getStartups()
@@ -134,6 +135,8 @@ def main(argv):
   for f in files:
     output.write("%s\n" % f)
   output.write("\n")
+  
+  output.write("*********************** Fim do log ***********************\n\n")
   return 0
 
 
