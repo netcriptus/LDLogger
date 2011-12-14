@@ -7,6 +7,8 @@ Created by Fernando Cezar on 2011-11-30.
 Copyright (c) 2011 __8bitsweb__. All rights reserved.
 """
 
+VERSION = "0.1"
+
 import sys
 import subprocess
 from platform import win32_ver, architecture
@@ -23,6 +25,8 @@ image_options_whitelist = image_options_whitelist.image_options_whitelist
 def main(argv):
   #output = sys.stdout
   output = open("LDLogger.txt", "w")
+  
+  output.write("LDLogger Version %s\n\n" % VERSION)
   
   # Getting OS name, build, service pack, and architecture
   OS, build, service_pack = win32_ver()[:-1]
