@@ -59,14 +59,14 @@ def getComponents(source_reg, target_reg, as_subkeys = True):
     subkeys = regOps.discoverSubkeys(source_reg["key"], source_reg["subkey"])
   else:
     subkeys = regOps.discoverValues(source_reg["key"], source_reg["subkey"])
-  
-  for subkey in subkeys:
-    subkey_name = subkey
-    objname = regOps.getRegistryValue(source_reg["key"], source_reg["subkey"] + "\\" + subkey, "") or "no name"
-    exepath = regOps.getRegistryValue(target_reg["key"], target_reg["subkey"] % subkey, "") or "file missing"
-    components.append({"subkey": subkey_name,
-                       "objname": objname,
-                       "exepath": exepath})
+  if subkeys:
+    for subkey in subkeys:
+      subkey_name = subkey
+      objname = regOps.getRegistryValue(source_reg["key"], source_reg["subkey"] + "\\" + subkey, "") or "no name"
+      exepath = regOps.getRegistryValue(target_reg["key"], target_reg["subkey"] % subkey, "") or "file missing"
+      components.append({"subkey": subkey_name,
+                        "objname": objname,
+                        "exepath": exepath})
   return components
 
 

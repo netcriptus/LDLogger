@@ -159,6 +159,7 @@ def main(argv):
     output.write("Primary DNS: %s\nSecondary DNS: %s\n" % (primaryDNS, secondaryDNS))
   
   output.write("\n\n*********************** Fim do log ***********************\n\n")
+  output.close()
   return 0
 
 
