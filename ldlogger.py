@@ -149,6 +149,8 @@ def main(argv):
       output.write("%s > %s\n" % (misassociation[0], misassociation[1]))
   else:
     output.write("> ok\n")
+    
+  # Getting DNS
   
   output.write("*********************** Fim do log ***********************\n\n")
   return 0
