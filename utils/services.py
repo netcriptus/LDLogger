@@ -71,6 +71,19 @@ def getWinlogonEntries(whitelist):
   return suspect_entries
 
 
+def checkAssociations(associations):
+  anomalies = []
+  for full_key in associations.keys():
+    key = full_key.split("\\")[0]
+    subkey = full_key.split("\\")[1]
+    expected_value = associations[full_key]
+    value = regOps.getRegistryValue(key, subkey, "")
+    if value != expected_value:
+      anomalies.append((subkey.split("\\")[-1], value))
+      
+  return anomalies
+
+
 def getImageFilesOptions(whitelist):
   key = "HKEY_LOCAL_MACHINE"
   subkey = "Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options"

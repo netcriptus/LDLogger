@@ -20,6 +20,7 @@ BROWSERS = BROWSERS_LIST.BROWSERS
 svchost_whitelist = svchostWhitelist.svchost_whitelist
 winlogon_whitelist = winlogon_whitelist.winlogon_whitelist
 image_options_whitelist = image_options_whitelist.image_options_whitelist
+associations = associations.associations
 
 
 def main(argv):
@@ -139,6 +140,15 @@ def main(argv):
   for f in files:
     output.write("%s\n" % f)
   output.write("\n")
+  
+  # Getting file extension association
+  misassociations = services.checkAssociations(associations)
+  output.write("\n\t#===== File Association =====#\n\n")
+  if misassociations:
+    for misassociation in misassociations:
+      output.write("%s > %s\n" % (misassociation[0], misassociation[1]))
+  else:
+    output.write("> ok\n")
   
   output.write("*********************** Fim do log ***********************\n\n")
   return 0
