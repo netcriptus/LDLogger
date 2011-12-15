@@ -14,6 +14,7 @@ import subprocess
 from platform import win32_ver, architecture
 from lists import *
 from utils import regOps, processes, services
+from datetime import datetime
 
 REG_KEYS = REG_KEYS_LIST.REG_KEYS
 BROWSERS = BROWSERS_LIST.BROWSERS
@@ -156,8 +157,12 @@ def main(argv):
   if not primaryDNS:
     output.write("No network adapter found\n")
   else:
-    output.write("Primary DNS: %s\nSecondary DNS: %s\n" % (primaryDNS, secondaryDNS))
+    output.write("Primary DNS: %s\nSecondary DNS: %s\n\n" % (primaryDNS, secondaryDNS))
   
+  hour = datetime.now()
+  output.write("*"*80)
+  output.write("\nLog gerado ")
+  output.write(" %d/%d/%d %d:%d:%d" % (hour.day, hour.month, hour.year, hour.hour, hour.minute, hour.second))
   output.write("\n\n*********************** Fim do log ***********************\n\n")
   output.close()
   return 0
