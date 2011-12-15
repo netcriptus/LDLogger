@@ -84,6 +84,29 @@ def checkAssociations(associations):
   return anomalies
 
 
+def getDNS():
+  key = "HKEY_LOCAL_MACHINE"
+  path_to_adapter = "SYSTEM\CurrentControlSet\Control\Network\{4D36E972-E325-11CE-BFC1-08002BE10318}"
+  partial_path = regOps.discoverSubkeys(key, path_to_adapter)
+  for subkey in partial_path:
+    if subkey.startswith("{"):
+      adapterID = subkey
+      break
+  else:
+    return None, None
+    
+  DNS = regOps.getRegistryValue(key, "SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\%s" % adapterID, "DhcpNameServer")
+  if len(DNS.split(" ")) == 2:
+    primary_dns = DNS.split(" ")[0]
+    secondary_dns = DNS.split(" ")[1]
+  else:
+    primary_dns = DNS
+    secondary_dns = ""
+    
+  return primary_dns, secondary_dns
+  
+
+
 def getImageFilesOptions(whitelist):
   key = "HKEY_LOCAL_MACHINE"
   subkey = "Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options"

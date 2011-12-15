@@ -151,8 +151,14 @@ def main(argv):
     output.write("> ok\n")
     
   # Getting DNS
+  output.write("\n\t#===== File Association =====#\n\n")
+  primaryDNS, secondaryDNS = services.getDNS()
+  if not primaryDNS:
+    output.write("No network adapter found\n")
+  else:
+    output.write("Primary DNS: %s\nSecondary DNS: %s\n" % (primaryDNS, secondaryDNS))
   
-  output.write("*********************** Fim do log ***********************\n\n")
+  output.write("\n\n*********************** Fim do log ***********************\n\n")
   return 0
 
 
