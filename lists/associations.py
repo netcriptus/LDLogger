@@ -1,4 +1,4 @@
-associations = {"HKEY_LOCAL_MACHINE\SOFTWARE\Classes\.com": "comfile",
+associations = {"HKEY_LOCAL_MACHINE\SOFTWARE\Classes\.com": "ComFile",
                 "HKEY_LOCAL_MACHINE\SOFTWARE\Classes\comfile\shell\open\command": "\"%1\" %*",
                 "HKEY_LOCAL_MACHINE\SOFTWARE\Classes\.exe": "exefile",
                 "HKEY_LOCAL_MACHINE\SOFTWARE\Classes\exefile\shell\open\command": "\"%1\" %*",
