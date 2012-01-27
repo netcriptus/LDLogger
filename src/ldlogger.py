@@ -7,7 +7,8 @@ Created by Fernando Cezar on 2011-11-30.
 Copyright (c) 2011 __8bitsweb__. All rights reserved.
 """
 
-VERSION = "0.1"
+VERSION = "0.1 alpha"
+
 
 import sys
 import subprocess
@@ -23,8 +24,7 @@ winlogon_whitelist = winlogon_whitelist.winlogon_whitelist
 image_options_whitelist = image_options_whitelist.image_options_whitelist
 associations = associations.associations
 
-
-def main(argv):
+def main(argv):  
   #output = sys.stdout
   output = open("LDLogger.txt", "w")
   
@@ -58,7 +58,8 @@ def main(argv):
   # Searching for anomalies on svchost
   output.write("\n\t#===== SVCHOST =====#\n\n")
   anomalies = services.getSvchostAnomalies(svchost_whitelist)
-  output.write("ok ok\n\n")
+  output.write(str(anomalies))
+  output.write("\n\n")
   if len(anomalies) == 0:
     output.write("No anomalies were found\n")
   else:
@@ -179,5 +180,12 @@ def main(argv):
 
 
 if __name__ == '__main__':
-  sys.exit(main(sys.argv))
+  try:
+    sys.exit(main(sys.argv))
+  except Exception as err:
+    error = open("error.txt", "w")
+    error.write("%s\n" % str(type(err)))
+    error.write("%s\n" % str(err.args))
+    error.close()
+    sys.exit(1)
 
