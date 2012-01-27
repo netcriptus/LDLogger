@@ -53,6 +53,16 @@ def getBrowsers(BROWSERS):
   return browser_list
 
 
+def getServices():
+  serv = subprocess.check_output("sc query type= service", shell = True)
+  return serv
+
+
+def getDrivers():
+  drivers = subprocess.check_output("sc query type= driver", shell = True)
+  return drivers
+
+
 def getComponents(source_reg, target_reg, as_subkeys = True):
   components = []
   if as_subkeys:

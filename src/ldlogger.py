@@ -58,6 +58,7 @@ def main(argv):
   # Searching for anomalies on svchost
   output.write("\n\t#===== SVCHOST =====#\n\n")
   anomalies = services.getSvchostAnomalies(svchost_whitelist)
+  output.write("ok ok\n\n")
   if len(anomalies) == 0:
     output.write("No anomalies were found\n")
   else:
@@ -158,6 +159,15 @@ def main(argv):
     output.write("No network adapter found\n")
   else:
     output.write("Primary DNS: %s\nSecondary DNS: %s\n\n" % (primaryDNS, secondaryDNS))
+    
+  svcs = processes.getServices()
+  output.write("\n\t#===== Services =====#\n\n")
+  output.write(svcs)
+  
+  drivers = processes.getDrivers()
+  output.write("\n\t#===== Drivers =====#\n\n")
+  output.write(drivers)
+  output.write("\n\n")
   
   hour = datetime.now()
   output.write("*"*80)
