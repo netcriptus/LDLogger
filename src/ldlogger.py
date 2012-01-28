@@ -173,7 +173,7 @@ def main(argv):
   hour = datetime.now()
   output.write("*"*80)
   output.write("\nLog gerado ")
-  output.write(" %d/%d/%d %d:%d:%d" % (hour.day, hour.month, hour.year, hour.hour, hour.minute, hour.second))
+  output.write(" %02.d/%02.d/%02.d %02.d:%02.d:%02.d" % (hour.day, hour.month, hour.year, hour.hour, hour.minute, hour.second))
   output.write("\n\n*********************** Fim do log ***********************\n\n")
   output.close()
   return 0
@@ -185,6 +185,7 @@ if __name__ == '__main__':
   except Exception as err:
     error = open("error.txt", "w")
     error.write("%s\n" % str(type(err)))
+    error.write("%s\n" % str(err.message))
     error.write("%s\n" % str(err.args))
     error.close()
     sys.exit(1)
