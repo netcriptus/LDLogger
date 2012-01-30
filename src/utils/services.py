@@ -50,7 +50,7 @@ def getLSP():
 
 def getOutcastKeys(key, subkey, whitelist):
   outcasts = []
-  entries = regOps.discoverSubkeys(key, subkey)
+  entries = regOps.discoverSubkeys(key, subkey) or []
   for entry in entries:
     if entry not in whitelist:
       outcasts.append(entry)
@@ -64,8 +64,8 @@ def getWinlogonEntries(whitelist):
   suspect_entries = []
   for outcast in outcasts:
     entry_path = regOps.getRegistryValue("HKEY_LOCAL_MACHINE",
-                                         "Software\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\%s" % outcast,
-                                         "DLLName")
+                                        "Software\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\%s" % outcast,
+                                       "  DLLName")
     suspect_entries.append((outcast, entry_path))
       
   return suspect_entries
@@ -96,7 +96,7 @@ def getDNS():
     return None, None
     
   DNS = regOps.getRegistryValue(key, "SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\%s" % adapterID, "DhcpNameServer")
-  if len(DNS.split(" ")) == 2:
+  if DNS and len(DNS.split(" ")) == 2:
     primary_dns = DNS.split(" ")[0]
     secondary_dns = DNS.split(" ")[1]
   else:
