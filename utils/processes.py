@@ -7,9 +7,12 @@ import subprocess
 def browser_version(browser_dict):
   try:
     version = regOps.getRegistryValue(browser_dict["key"], browser_dict["subkey"], "Version")
-    version = (browser_dict["name"], version)
   except WindowsError:
-    version = None
+    try:
+      version = regOps.discoverSubkeys(browser_dict["key"], browser_dict["subkey"])[0]
+    except WindowsError:
+      version = None
+  version = (browser_dict["name"], version)
   return version
 
 

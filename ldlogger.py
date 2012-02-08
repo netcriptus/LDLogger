@@ -253,6 +253,7 @@ def main(argv):
   output.write(" %02.d/%02.d/%02.d %02.d:%02.d:%02.d" % (hour.day, hour.month, hour.year, hour.hour, hour.minute, hour.second))
   output.write("\n\n*********************** Fim do log ***********************\n\n")
   output.close()
+  subprocess.call("start notepad LDLogger.txt")
   return 0
 
 
