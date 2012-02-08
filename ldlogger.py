@@ -24,7 +24,7 @@ try:
   import subprocess
   from platform import win32_ver, architecture
   from lists import *
-  from utils import regOps, processes, services
+  from utils import regOps, processes, services, drivers
   from datetime import datetime
 
   REG_KEYS = REG_KEYS_LIST.REG_KEYS
@@ -33,6 +33,9 @@ try:
   winlogon_whitelist = winlogon_whitelist.winlogon_whitelist
   image_options_whitelist = image_options_whitelist.image_options_whitelist
   associations = associations.associations
+  services_whitelist = srv_and_drvs_whitelist.services_whitelist
+  drivers_whitelist = srv_and_drvs_whitelist.drivers_whitelist
+  
 except Exception as err:
   log_error("importing", err)
 
@@ -153,7 +156,7 @@ def main(argv):
       output.write("\n\t#===== Startups =====#\n\n")
       if user_startups:
         output.write("Startups: ")
-        for startup in user_startup:
+        for startup in user_startups:
           output.write("%s " % user_startups)
         output.write("\n")
       if global_startups:
@@ -219,17 +222,27 @@ def main(argv):
     
   try:
     # Getting Services
-    svcs = processes.getServices()
+    svcs = drivers.getServices(services_whitelist)
     output.write("\n\t#===== Services =====#\n\n")
-    output.write(svcs)
+    if svcs:
+      for svc in svcs:
+        output.write(svc)
+        output.write("\n")
+    else:
+      output.write("Nothing unusual\n")
   except Exception as err:
     log_error("services", err)
   
   try:
     # Getting Drivers
-    drivers = processes.getDrivers()
+    drvs = drivers.getDrivers(drivers_whitelist)
     output.write("\n\t#===== Drivers =====#\n\n")
-    output.write(drivers)
+    if drvs:
+      for drv in drvs:
+        output.write(drv)
+        output.write("\n")
+    else:
+      output.write("Nothing unusual\n")
     output.write("\n\n")
   except Exception as err:
     log_error("drivers", err)
