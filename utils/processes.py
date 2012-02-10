@@ -6,12 +6,10 @@ import subprocess
 
 def browser_version(browser_dict):
   try:
-    version = regOps.getRegistryValue(browser_dict["key"], browser_dict["subkey"], "Version")
+    version = regOps.getRegistryValue(browser_dict["key"], browser_dict["subkey"], "Version") or \
+              regOps.getRegistryValue(browser_dict["key"], browser_dict["subkey"], "CurrentVersion")
   except WindowsError:
-    try:
-      version = regOps.discoverSubkeys(browser_dict["key"], browser_dict["subkey"])[0]
-    except WindowsError:
-      version = None
+    version = None
   version = (browser_dict["name"], version)
   return version
 

@@ -70,7 +70,7 @@ def main(argv):
     # Getting running processes and the path to its exetuable
     output.write("\n\t#===== Running Processes =====#\n\n")
     for process, process_path in processes.running_processes():
-      output.write("%s\t=>\t%s\n" % (process, process_path))
+      output.write("{0:30}  ==>  {1:30}\n".format(process, process_path))
   except Exception as err:
     log_error("running processes", err)
   
