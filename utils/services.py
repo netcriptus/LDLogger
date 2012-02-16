@@ -66,7 +66,8 @@ def getWinlogonEntries(whitelist):
     entry_path = regOps.getRegistryValue("HKEY_LOCAL_MACHINE",
                                         "Software\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\%s" % outcast,
                                        "  DLLName")
-    suspect_entries.append((outcast, entry_path))
+    if outcast and entry_path:
+      suspect_entries.append((outcast, entry_path))
       
   return suspect_entries
 

@@ -157,12 +157,12 @@ def main(argv):
       if user_startups:
         output.write("Startups: ")
         for startup in user_startups:
-          output.write("%s " % user_startups.decode("utf-8"))
+          output.write("%s " % str(user_startups).decode("utf-8"))
         output.write("\n")
       if global_startups:
         output.write("Global: ")
         for startup in global_startups:
-          output.write("%s " % startup.decode("utf-8"))
+          output.write("%s " % str(startup).decode("utf-8"))
         output.write("\n")
   except Exception as err:
     log_error("startups", err)
