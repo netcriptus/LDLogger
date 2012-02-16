@@ -260,7 +260,12 @@ def main(argv):
     
   try:
     # Looking mountpoints
-    pass
+    suspect_mountpoints = drivers.getMountpoints()
+    if suspect_mountpoints:
+      output.write("\n\t#===== Mountpoints =====#\n\n")
+      for mountpoint in suspect_mountpoints:
+        output.write("%s - %s" % (mountpoint[0].decode("utf-8"), mountpoint[1].decode("utf-8")))
+      
   except Exception as err:
     log_error("mountpoints", err)
   
