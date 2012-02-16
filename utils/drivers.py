@@ -3,7 +3,8 @@
 
 import regOps
 import subprocess
-from win32api import GetFileVersionInfo
+from win32api import GetFileVersionInfo, GetLogicalDriveStrings
+from win32file import GetDriveType, DRIVE_FIXED
 from os import getenv
 
 
@@ -61,3 +62,20 @@ def getDrivers(whitelist):
   drvs = subprocess.check_output("sc query type= driver", shell = True)
   drvs = parseSC("DRV", drvs, whitelist)
   return drvs
+
+
+def searchAutorun():
+  devices = GetLogicalDriveStrings().split("\\\x00")[:-1]
+  autoruns = []
+  if "A:" in devices:
+    devices.remove("A:")
+    
+  # List comprehention. Isn't it beautiful?
+  fixed_devices = [device for device in devices if GetDriveType(device) == DRIVE_FIXED]
+  
+  for device in fixed_devices:
+    device_content = subprocess.check_output(["dir", "/a/b", device + "\\"], shell=True)
+    if "autorun.inf" in device_content or "autorun.exe" in device_content:
+      autoruns.append(device)
+  return autoruns or None
+    

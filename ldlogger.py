@@ -7,7 +7,7 @@ Created by Fernando Cezar on 2011-11-30.
 Copyright (c) 2011 __8bitsweb__. All rights reserved.
 """
 
-VERSION = "0.2.1 alpha"
+VERSION = "0.2.2 alpha"
 
 
 def log_error(local, err):
@@ -70,7 +70,7 @@ def main(argv):
     # Getting running processes and the path to its exetuable
     output.write("\n\t#===== Running Processes =====#\n\n")
     for process, process_path in processes.running_processes():
-      output.write("{0:30}  ==>  {1:30}\n".format(process, process_path))
+      output.write("{0:30}  ==>  {1:30}\n".format(process.decode("utf-8"), process_path.decode("utf-8")))
   except Exception as err:
     log_error("running processes", err)
   
@@ -79,7 +79,7 @@ def main(argv):
     output.write("\n\t#===== Registry Keys =====#\n\n")
     regs = regOps.getRegs(REG_KEYS)
     for reg in regs:
-      output.write("%s\n" % reg)
+      output.write("%s\n" % reg.decode("utf-8"))
   except Exception as err:
     log_error("registry keys", err)
   
@@ -123,9 +123,9 @@ def main(argv):
                   "subkey": "CLSID\%s\InprocServer32"}
     IEComponents = processes.getComponents(source_reg, target_reg)
     for IEComponent in IEComponents:
-      output.write("Key: %s\n" % IEComponent["subkey"])
-      output.write("Object Name: %s\n" % IEComponent["objname"])
-      output.write("Path to executable: %s\n" % IEComponent["exepath"])
+      output.write("Key: %s\n" % IEComponent["subkey"].decode("utf-8"))
+      output.write("Object Name: %s\n" % IEComponent["objname"].decode("utf-8"))
+      output.write("Path to executable: %s\n" % IEComponent["exepath"].decode("utf-8"))
       output.write("-"*50)
       output.write("\n")
   except Exception as err:
@@ -141,9 +141,9 @@ def main(argv):
     if IEToolbars:
       output.write("\n\t#===== IE Toolbars =====#\n\n")
       for toolbar in IEToolbars:
-        output.write("Key: %s\n" % toolbar["subkey"])
-        output.write("Object Name: %s\n" % toolbar["objname"])
-        output.write("Path to executable: %s\n" % toolbar["exepath"])
+        output.write("Key: %s\n" % toolbar["subkey"].decode("utf-8"))
+        output.write("Object Name: %s\n" % toolbar["objname"].decode("utf-8"))
+        output.write("Path to executable: %s\n" % toolbar["exepath"].decode("utf-8"))
         output.write("-"*50)
         output.write("\n")
   except Exception as err:
@@ -157,12 +157,12 @@ def main(argv):
       if user_startups:
         output.write("Startups: ")
         for startup in user_startups:
-          output.write("%s " % user_startups)
+          output.write("%s " % user_startups.decode("utf-8"))
         output.write("\n")
       if global_startups:
         output.write("Global: ")
         for startup in global_startups:
-          output.write("%s " % startup)
+          output.write("%s " % startup.decode("utf-8"))
         output.write("\n")
   except Exception as err:
     log_error("startups", err)
@@ -173,7 +173,7 @@ def main(argv):
     num_entries, LSPs = services.getLSP()
     output.write("%d entradas\n\n" % num_entries)
     for LSP in LSPs:
-      output.write("%s: %s\n" % (LSP[0], LSP[1]))
+      output.write("%s: %s\n" % (LSP[0].decode("utf-8"), LSP[1].decode("utf-8")))
   except Exception as err:
     log_error("LSP", err)
   
@@ -183,7 +183,7 @@ def main(argv):
     if winlogon_entries:
       output.write("\n\t#===== WinLogon =====#\n\n")
       for entry in winlogon_entries:
-        output.write("Notify: %s => %s\n" % (entry[0], entry[1]))
+        output.write("Notify: %s => %s\n" % (entry[0].decode("utf-8"), entry[1].decode("utf-8")))
   except Exception as err:
     log_error("winlogon", err)
   
@@ -192,7 +192,7 @@ def main(argv):
     output.write("\n\t#===== Image File Execution Options =====#\n\n")
     files = services.getImageFilesOptions(image_options_whitelist)
     for f in files:
-      output.write("%s\n" % f)
+      output.write("%s\n" % f.decode("utf-8"))
     output.write("\n")
   except Exception as err:
     log_error("image file execution", err)
@@ -203,7 +203,7 @@ def main(argv):
     output.write("\n\t#===== File Association =====#\n\n")
     if misassociations:
       for misassociation in misassociations:
-        output.write("%s > %s\n" % (misassociation[0], misassociation[1]))
+        output.write("%s > %s\n" % (misassociation[0].decode("utf-8"), misassociation[1].decode("utf-8")))
     else:
       output.write("> ok\n")
   except Exception as err:
@@ -226,7 +226,7 @@ def main(argv):
     output.write("\n\t#===== Services =====#\n\n")
     if svcs:
       for svc in svcs:
-        output.write(svc)
+        output.write(svc.decode("utf-8"))
         output.write("\n")
     else:
       output.write("Nothing unusual\n")
@@ -239,13 +239,30 @@ def main(argv):
     output.write("\n\t#===== Drivers =====#\n\n")
     if drvs:
       for drv in drvs:
-        output.write(drv)
+        output.write(drv.decode("utf-8"))
         output.write("\n")
     else:
       output.write("Nothing unusual\n")
     output.write("\n\n")
   except Exception as err:
     log_error("drivers", err)
+    
+  try:
+    # Searching autoruns
+    autoruns = drivers.searchAutorun()
+    if autoruns:
+      output.write("\n\t#===== Autoruns found =====#\n\n")
+      for autorun in autoruns:
+        output.write("Autorun found in %s\n" % autorun)
+      output.write("\n\n")
+  except Exception as err:
+    log_error("autoruns", err)
+    
+  try:
+    # Looking mountpoints
+    pass
+  except Exception as err:
+    log_error("mountpoints", err)
   
   hour = datetime.now()
   output.write("*"*80)
@@ -253,7 +270,7 @@ def main(argv):
   output.write(" %02.d/%02.d/%02.d %02.d:%02.d:%02.d" % (hour.day, hour.month, hour.year, hour.hour, hour.minute, hour.second))
   output.write("\n\n*********************** Fim do log ***********************\n\n")
   output.close()
-  subprocess.call("start notepad LDLogger.txt")
+  subprocess.call("start notepad LDLogger.txt", shell=True)
   return 0
 
 
