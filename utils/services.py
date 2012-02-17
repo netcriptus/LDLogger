@@ -15,7 +15,7 @@ def getSvchostAnomalies(whitelist):
     if value not in whitelist:
       DLL = regOps.getRegistryValue("HKEY_LOCAL_MACHINE", "SYSTEM\CurrentControlSet\Services\\" +  value + "\\Parameters", "ServiceDll")
       if not DLL:
-        DLL = "Unkown. You may need to restart the system."
+        DLL = "Unknown. You may need to restart the system."
       anomalies.append((value, DLL))
       
   return anomalies
