@@ -31,7 +31,6 @@ try:
   BROWSERS = BROWSERS_LIST.BROWSERS
   svchost_whitelist = svchostWhitelist.svchost_whitelist
   winlogon_whitelist = winlogon_whitelist.winlogon_whitelist
-  image_options_whitelist = image_options_whitelist.image_options_whitelist
   associations = associations.associations
   services_whitelist = srv_and_drvs_whitelist.services_whitelist
   drivers_whitelist = srv_and_drvs_whitelist.drivers_whitelist
@@ -189,11 +188,12 @@ def main(argv):
   
   try:
     # Getting Image File Execution Options
-    output.write("\n\t#===== Image File Execution Options =====#\n\n")
-    files = services.getImageFilesOptions(image_options_whitelist)
-    for f in files:
-      output.write("%s\n" % f.decode("utf-8"))
-    output.write("\n")
+    files = services.getImageFilesOptions()
+    if files:
+      output.write("\n\t#===== Image File Execution Options =====#\n\n")
+      for f in files:
+        output.write("%s > %s\n" % (f[0].decode("utf-8"), f[1].decode("utf-8")))
+      output.write("\n")
   except Exception as err:
     log_error("image file execution", err)
   
@@ -264,7 +264,8 @@ def main(argv):
     if suspect_mountpoints:
       output.write("\n\t#===== Mountpoints =====#\n\n")
       for mountpoint in suspect_mountpoints:
-        output.write("%s - %s" % (mountpoint[0].decode("utf-8"), mountpoint[1].decode("utf-8")))
+        output.write("%s - %s\n" % (mountpoint[0].decode("utf-8"), mountpoint[1].decode("utf-8")))
+      output.write("\n\n")
       
   except Exception as err:
     log_error("mountpoints", err)

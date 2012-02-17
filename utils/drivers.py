@@ -69,7 +69,7 @@ def getMountpoints():
   mountpoints = regOps.discoverSubkeys("HKEY_CURRENT_USER", "Software\Microsoft\Windows\CurrentVersion\Explorer\MountPoints2")
   for mountpoint in mountpoints:
     value = regOps.getRegistryValue("HKEY_CURRENT_USER",
-                                    "Software\Microsoft\Windows\CurrentVersion\Explorer\MountPoints2\%s\shell\AutoRun\command",
+                                    "Software\Microsoft\Windows\CurrentVersion\Explorer\MountPoints2\%s\shell\AutoRun\command" % mountpoint,
                                     "")
     if value:
       suspects.append([mountpoint, value])

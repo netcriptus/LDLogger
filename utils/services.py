@@ -108,11 +108,16 @@ def getDNS():
   
 
 
-def getImageFilesOptions(whitelist):
+def getImageFilesOptions():
   key = "HKEY_LOCAL_MACHINE"
-  subkey = "Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options"
-  outcasts = getOutcastKeys(key, subkey, whitelist)
-  return outcasts
+  IFEO = "Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options"
+  subkeys = regOps.discoverSubkeys(key, IFEO)
+  suspects = []
+  for subkey in subkeys:
+    debugger = regOps.getRegistryValue(key, IFEO + "\\" + subkey, "Debugger")
+    if debugger:
+      suspects.append([subkey, debugger])
+  return suspects or None
 
 
 def getHosts():
