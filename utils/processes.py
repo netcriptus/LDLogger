@@ -20,7 +20,8 @@ def running_processes():
   
   for line in processes_list:
     parsed_line = line.strip().split(" ")
-    yield parsed_line[0], parsed_line[-1]
+    if parsed_line:
+      yield parsed_line[0], " ".join(parsed_line[1:]).strip()
 
 
 def getStartups():
