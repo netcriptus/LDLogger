@@ -66,11 +66,15 @@ def getDrivers(whitelist):
 
 def getMountpoints():
   suspects = []
+  main_key = "HKEY_CURRENT_USER"
+  subkey = "Software\Microsoft\Windows\CurrentVersion\Explorer\MountPoints2\%s\shell\%s\command"
   mountpoints = regOps.discoverSubkeys("HKEY_CURRENT_USER", "Software\Microsoft\Windows\CurrentVersion\Explorer\MountPoints2")
   for mountpoint in mountpoints:
-    value = regOps.getRegistryValue("HKEY_CURRENT_USER",
-                                    "Software\Microsoft\Windows\CurrentVersion\Explorer\MountPoints2\%s\shell\AutoRun\command" % mountpoint,
-                                    "")
+    value = regOps.getRegistryValue(main_key, subkey % (mountpoint, "AutoRun"), "") or\
+            regOps.getRegistryValue(main_key, subkey % (mountpoint, "explore"), "") or\
+            regOps.getRegistryValue(main_key, subkey % (mountpoint, "open"), "")
+            
+                                    
     if value:
       suspects.append([mountpoint, value])
   return suspects or None

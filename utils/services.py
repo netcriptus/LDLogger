@@ -115,7 +115,7 @@ def getImageFilesOptions():
   suspects = []
   for subkey in subkeys:
     debugger = regOps.getRegistryValue(key, IFEO + "\\" + subkey, "Debugger")
-    if debugger and debugger.strip() != "Your Image File Name Here without a path":
+    if debugger and subkey.strip() != "Your Image File Name Here without a path":
       suspects.append([subkey, debugger])
   return suspects or None
 
