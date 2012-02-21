@@ -2,7 +2,7 @@
 # encoding: utf-8
 
 
-import datetime
+from datetime import datetime
 
 class Printer(object):
   def __init__(self, output, version):
