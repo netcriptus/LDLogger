@@ -7,7 +7,7 @@ Created by Fernando Cezar on 2011-11-30.
 Copyright (c) 2011 __8bitsweb__. All rights reserved.
 """
 
-VERSION = "0.2.2 alpha"
+VERSION = "0.3 alpha"
 
 
 def log_error(local, err):
