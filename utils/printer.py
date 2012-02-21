@@ -11,6 +11,7 @@ class Printer(object):
   
     
   def printVersion(self):
+    self.output.write("LDLogger Versão ")
     self.output.write(self.version)
     self.output.write("\n")
   
@@ -47,21 +48,17 @@ class Printer(object):
   
   def BHO(self, components_list):
     for IEComponent in components_list:
-      self.output.write("Key: %s\n" % IEComponent["subkey"].decode("utf-8"))
-      self.output.write("Object Name: %s\n" % IEComponent["objname"].decode("utf-8"))
-      self.output.write("Path to executable: %s\n" % IEComponent["exepath"].decode("utf-8"))
-      self.output.write("-"*50)
-      self.output.write("\n")
+      self.output.write("BHO - %s - "  % IEComponent["objname"].decode("utf-8"))
+      self.output.write("%s - " % IEComponent["subkey"].decode("utf-8"))
+      self.output.write("%s\n" % IEComponent["exepath"].decode("utf-8"))
   
   
   def IEToolbars(self, toolbars):
     if toolbars:
       for toolbar in toolbars:
-        self.output.write("Key: %s\n" % toolbar["subkey"].decode("utf-8"))
-        self.output.write("Object Name: %s\n" % toolbar["objname"].decode("utf-8"))
-        self.output.write("Path to executable: %s\n" % toolbar["exepath"].decode("utf-8"))
-        self.output.write("-"*50)
-        self.output.write("\n")
+        self.output.write("Toolbar - %s - " % toolbar["objname"].decode("utf-8"))
+        self.output.write("%s - " % toolbar["subkey"].decode("utf-8"))
+        self.output.write("%s\n" % toolbar["exepath"].decode("utf-8"))
   
   
   def registers(self, regs, IEComponents, IEToolbars, global_startups, user_startups, LSPs, primaryDNS, secondaryDNS, winlogon_entries):
@@ -89,21 +86,20 @@ class Printer(object):
     if not primaryDNS:
       self.output.write("No network adapter found\n")
     else:
-      self.output.write("Primary DNS: %s\nSecondary DNS: %s\n" % (primaryDNS, secondaryDNS))
+      self.output.write("TCPIP DNSSERVER: %s, %s\n" % (primaryDNS, secondaryDNS))
   
   
   def autoruns(self, autoruns_list):
     if autoruns_list:
       for autorun in autoruns_list:
-        self.output.write("Autorun found in %s\n" % autorun)
+        self.output.write("Autorun: %s\\Autorun present!\n" % autorun)
       self.output.write("\n\n")
   
   
   def mountpoints(self, suspect_mountpoints):
       if suspect_mountpoints:
         for mountpoint in suspect_mountpoints:
-          self.output.write("%s - %s\n" % (mountpoint[0].decode("utf-8"), mountpoint[1].decode("utf-8")))
-        self.output.write("\n\n")
+          self.output.write("MountPoints: %s - %s\n" % (mountpoint[0].decode("utf-8"), mountpoint[1].decode("utf-8")))
   
   
   def services(self, svcs):
@@ -133,13 +129,12 @@ class Printer(object):
       self.output.write("No anomalies were found\n")
     else:
       for anomalie in anomalies:
-        self.output.write("%s -> %s\n" % (str(anomalie[0]), str(anomalie[1])))
+        self.output.write("NetSvc: {0:20} - {1:20}\n".format(str(anomalie[0]), str(anomalie[1])))
   
   
   def safeboot(self, safeboot_exists):
     if safeboot_exists:
-      self.sessionTitle("Safe Boot")
-      self.output.write("Está máquina não pode entrar em modo seguro\n\n")
+      self.output.write("Safeboot: Esta máquina não pode entrar em modo seguro\n\n")
   
   
   def startups(self, global_startups, user_startups):
@@ -163,9 +158,8 @@ class Printer(object):
   
   def IFEO(self, files):
     if files:
-      self.sessionTitle("Image File Execution Options")
       for f in files:
-        self.output.write("%s > %s\n" % (f[0].decode("utf-8"), f[1].decode("utf-8")))
+        self.output.write("{0:20} - {1:20}\n".format(f[0].decode("utf-8"), f[1].decode("utf-8")))
       self.output.write("\n")
   
   
@@ -180,6 +174,7 @@ class Printer(object):
   
   def finishLog(self):
     hour = datetime.now()
+    self.output.write("\n\n")
     self.output.write("*"*80)
     self.output.write("\nLog gerado ")
     self.output.write(" %02.d/%02.d/%02.d %02.d:%02.d:%02.d" % (hour.day, hour.month, hour.year, hour.hour, hour.minute, hour.second))

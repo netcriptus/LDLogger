@@ -87,8 +87,8 @@ def getRegs(reg_list):
       try:
         content = getRegistryValue(reg_key["key"], reg_key["subkey"], value)
         if not content:
-          content = "missing"
-        regs.append(reg_key["key"] + chr(92) + reg_key["subkey"] + chr(92) + value + ": " + content)
+          continue
+        regs.append(reg_key["tag"] + value + ": " + content)
       except WindowsError:
         continue
   return regs
