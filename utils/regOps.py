@@ -70,6 +70,13 @@ def getRegs(reg_list):
   """
   regs = []
   for reg_key in reg_list:
+    if reg_key["key"] == "Startups":
+      regs.append("Startups")
+      continue
+    elif reg_key["key"] == "winlogon":
+      regs.append("winlogon")
+      continue
+    
     values = reg_key["values"]
     if values == []:
       values = discoverValues(reg_key["key"], reg_key["subkey"])

@@ -12,6 +12,7 @@ class Printer(object):
     
   def printVersion(self):
     self.output.write(self.version)
+    self.output.write("\n")
   
   
   def sessionTitle(self, title):
@@ -44,8 +45,7 @@ class Printer(object):
       self.output.write("E mais %d entradas\n" % len(hosts) - 15)
   
   
-  def IEComponents(self, components_list):
-    self.sessionTitle("IE Components")
+  def BHO(self, components_list):
     for IEComponent in components_list:
       self.output.write("Key: %s\n" % IEComponent["subkey"].decode("utf-8"))
       self.output.write("Object Name: %s\n" % IEComponent["objname"].decode("utf-8"))
@@ -56,7 +56,6 @@ class Printer(object):
   
   def IEToolbars(self, toolbars):
     if toolbars:
-      self.sessionTitle("IE Toolbars")
       for toolbar in toolbars:
         self.output.write("Key: %s\n" % toolbar["subkey"].decode("utf-8"))
         self.output.write("Object Name: %s\n" % toolbar["objname"].decode("utf-8"))
@@ -65,30 +64,36 @@ class Printer(object):
         self.output.write("\n")
   
   
-  def registers(self, regs):
+  def registers(self, regs, IEComponents, IEToolbars, global_startups, user_startups, LSPs, primaryDNS, secondaryDNS, winlogon_entries):
     self.sessionTitle("Registry Keys")
+    self.BHO(IEComponents)
+    self.IEToolbars(IEToolbars)
     for reg in regs:
+      if reg == "Startups":
+        self.startups(global_startups, user_startups)
+        continue
+      elif reg == "winlogon":
+        self.LSP(LSPs)
+        self.DNS(primaryDNS, secondaryDNS)
+        self.winlogon(winlogon_entries)
+        continue
       self.output.write("%s\n" % reg.decode("utf-8"))
   
   
-  def LSP(self, num_entries, LSPs):
-    self.sessionTitle("LSP's")
-    self.output.write("%d entradas\n\n" % num_entries)
+  def LSP(self, LSPs):
     for LSP in LSPs:
-      self.output.write("%s: %s\n" % (LSP[0].decode("utf-8"), LSP[1].decode("utf-8")))
+      self.output.write("LSP - %s: %s\n" % (LSP[0].decode("utf-8"), LSP[1].decode("utf-8")))
   
   
   def DNS(self, primaryDNS, secondaryDNS):
-    self.sessionTitle("DNS")
     if not primaryDNS:
       self.output.write("No network adapter found\n")
     else:
-      self.output.write("Primary DNS: %s\nSecondary DNS: %s\n\n" % (primaryDNS, secondaryDNS))
+      self.output.write("Primary DNS: %s\nSecondary DNS: %s\n" % (primaryDNS, secondaryDNS))
   
   
   def autoruns(self, autoruns_list):
     if autoruns_list:
-      self.sessionTitle("Autoruns found")
       for autorun in autoruns_list:
         self.output.write("Autorun found in %s\n" % autorun)
       self.output.write("\n\n")
@@ -96,7 +101,6 @@ class Printer(object):
   
   def mountpoints(self, suspect_mountpoints):
       if suspect_mountpoints:
-        self.sessionTitle("Mountpoints")
         for mountpoint in suspect_mountpoints:
           self.output.write("%s - %s\n" % (mountpoint[0].decode("utf-8"), mountpoint[1].decode("utf-8")))
         self.output.write("\n\n")
@@ -124,7 +128,7 @@ class Printer(object):
   
   
   def SVCHOST(self, anomalies):
-    self.sessionTitle("SVCHOST")
+    self.sessionTitle("NetSvc")
     if len(anomalies) == 0:
       self.output.write("No anomalies were found\n")
     else:
@@ -139,23 +143,20 @@ class Printer(object):
   
   
   def startups(self, global_startups, user_startups):
-    if global_startups or user_startups:
-      self.sessionTitle("Startups")
-      if user_startups:
-        self.output.write("Startups: ")
-        for startup in user_startups:
-          self.output.write("%s " % str(user_startups).strip().decode("utf-8"))
-        self.output.write("\n")
-      if global_startups:
-        self.output.write("Global: ")
-        for startup in global_startups:
-          self.output.write("%s " % str(startup).strip().decode("utf-8"))
-        self.output.write("\n")
+    if user_startups:
+      self.output.write("Startups: ")
+      for startup in user_startups:
+        self.output.write("%s " % str(user_startups).strip().decode("utf-8"))
+      self.output.write("\n")
+    if global_startups:
+      self.output.write("Global: ")
+      for startup in global_startups:
+        self.output.write("%s " % str(startup).strip().decode("utf-8"))
+      self.output.write("\n")
   
   
   def winlogon(self, winlogon_entries):
     if winlogon_entries:
-      self.sessionTitle("WinLogon")
       for entry in winlogon_entries:
         self.output.write("Notify: %s => %s\n" % (entry[0].decode("utf-8"), entry[1].decode("utf-8")))
   
