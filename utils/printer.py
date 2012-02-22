@@ -61,7 +61,8 @@ class Printer(object):
         self.output.write("%s\n" % toolbar["exepath"].decode("utf-8"))
   
   
-  def registers(self, regs, IEComponents, IEToolbars, global_startups, user_startups, LSPs, primaryDNS, secondaryDNS, winlogon_entries):
+  def registers(self, regs, IEComponents, IEToolbars, global_startups, user_startups,
+                LSPs, primaryDNS, secondaryDNS, adapterID, winlogon_entries):
     self.sessionTitle("Registry Keys")
     self.BHO(IEComponents)
     self.IEToolbars(IEToolbars)
@@ -71,7 +72,7 @@ class Printer(object):
         continue
       elif reg == "winlogon":
         self.LSP(LSPs)
-        self.DNS(primaryDNS, secondaryDNS)
+        self.DNS(primaryDNS, secondaryDNS, adapterID)
         self.winlogon(winlogon_entries)
         continue
       self.output.write("%s\n" % reg.decode("utf-8"))
@@ -82,11 +83,11 @@ class Printer(object):
       self.output.write("LSP - %s: %s\n" % (LSP[0].decode("utf-8"), LSP[1].decode("utf-8")))
   
   
-  def DNS(self, primaryDNS, secondaryDNS):
+  def DNS(self, primaryDNS, secondaryDNS, adapterID):
     if not primaryDNS:
       self.output.write("No network adapter found\n")
     else:
-      self.output.write("TCPIP DNSSERVER: %s, %s\n" % (primaryDNS, secondaryDNS))
+      self.output.write("TCPIP - %s - NAMESERVER: %s, %s\n" % (adapterID, primaryDNS, secondaryDNS))
   
   
   def autoruns(self, autoruns_list):
@@ -124,12 +125,11 @@ class Printer(object):
   
   
   def SVCHOST(self, anomalies):
-    self.sessionTitle("NetSvc")
     if len(anomalies) == 0:
-      self.output.write("No anomalies were found\n")
+      self.output.write("NetSvc: No anomalies were found\n\n")
     else:
       for anomalie in anomalies:
-        self.output.write("NetSvc: {0:20} - {1:20}\n".format(str(anomalie[0]), str(anomalie[1])))
+        self.output.write("NetSvc: {0:20} - {1:20}\n\n".format(str(anomalie[0]), str(anomalie[1])))
   
   
   def safeboot(self, safeboot_exists):
@@ -159,7 +159,7 @@ class Printer(object):
   def IFEO(self, files):
     if files:
       for f in files:
-        self.output.write("{0:20} - {1:20}\n".format(f[0].decode("utf-8"), f[1].decode("utf-8")))
+        self.output.write("IFEO - {0:20}: Debugger={1:20}\n".format(f[0].decode("utf-8"), f[1].decode("utf-8")))
       self.output.write("\n")
   
   
@@ -167,7 +167,8 @@ class Printer(object):
     self.sessionTitle("File Association")
     if misassociations:
       for misassociation in misassociations:
-        self.output.write("%s > %s\n" % (misassociation[0].decode("utf-8"), misassociation[1].decode("utf-8")))
+        self.output.write("HKLM - %s: %s\n" % (misassociation[0].decode("utf-8"), misassociation[1].decode("utf-8")))
+      self.output.write("\n")
     else:
       self.output.write("> ok\n")
   

@@ -80,7 +80,7 @@ def checkAssociations(associations):
     expected_value = associations[full_key]
     value = regOps.getRegistryValue(key, subkey, "")
     if value != expected_value:
-      anomalies.append((subkey, value))
+      anomalies.append((subkey.split("\\")[-1], value))
       
   return anomalies
 
@@ -94,7 +94,7 @@ def getDNS():
       adapterID = subkey
       break
   else:
-    return None, None
+    return None, None, None
     
   DNS = regOps.getRegistryValue(key, "SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\%s" % adapterID, "DhcpNameServer")
   if DNS and len(DNS.split(" ")) == 2:
@@ -104,7 +104,7 @@ def getDNS():
     primary_dns = DNS
     secondary_dns = ""
     
-  return primary_dns, secondary_dns
+  return primary_dns, secondary_dns, adapterID
   
 
 

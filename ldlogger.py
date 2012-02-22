@@ -104,7 +104,7 @@ def main(argv):
     
   try:
     # Getting DNS
-    primaryDNS, secondaryDNS = services.getDNS()
+    primaryDNS, secondaryDNS, adapterID = services.getDNS()
   except Exception as err:
     log_error("DNS", err)
   
@@ -174,7 +174,8 @@ def main(argv):
     output.browsers(browser_list)
     output.runningProcesses(running_processes_list)
     output.hosts(hosts)
-    output.registers(regs, IEComponents, IEToolbars, global_startups, user_startups, LSPs, primaryDNS, secondaryDNS, winlogon_entries)
+    output.registers(regs, IEComponents, IEToolbars, global_startups, user_startups, LSPs, primaryDNS,
+                     secondaryDNS, adapterID, winlogon_entries)
     output.autoruns(autoruns)
     output.mountpoints(suspect_mountpoints)
     output.services(svcs)
