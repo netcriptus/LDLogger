@@ -23,7 +23,8 @@ def getSvchostAnomalies(whitelist):
 
 def safeBootExists():
   safe_boot_regs = regOps.discoverSubkeys("HKEY_LOCAL_MACHINE", "SYSTEM\CurrentControlSet\Control\SafeBoot")
-  if not safe_boot_regs:
+  print safe_boot_regs
+  if len(safe_boot_regs) == 0:
     return False
   else:
     return True

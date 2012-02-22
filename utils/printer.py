@@ -133,7 +133,7 @@ class Printer(object):
   
   
   def safeboot(self, safeboot_exists):
-    if safeboot_exists:
+    if not safeboot_exists:
       self.output.write("Safeboot: Esta máquina não pode entrar em modo seguro\n\n")
   
   
