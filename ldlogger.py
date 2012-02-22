@@ -170,6 +170,7 @@ def main(argv):
   
   
   try:
+    # This is where we print the results we've got
     output.systemInfo(OS, build, service_pack, arch)
     output.browsers(browser_list)
     output.runningProcesses(running_processes_list)
