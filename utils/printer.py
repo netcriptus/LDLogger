@@ -48,17 +48,17 @@ class Printer(object):
   
   def BHO(self, components_list):
     for IEComponent in components_list:
-      self.output.write("BHO - %s - "  % IEComponent["objname"].decode("utf-8"))
-      self.output.write("%s - " % IEComponent["subkey"].decode("utf-8"))
-      self.output.write("%s\n" % IEComponent["exepath"].decode("utf-8"))
+      self.output.write("BHO - %s - "  % IEComponent["objname"].decode("iso8859-1"))
+      self.output.write("%s - " % IEComponent["subkey"].decode("iso8859-1"))
+      self.output.write("%s\n" % IEComponent["exepath"].decode("iso8859-1"))
   
   
   def IEToolbars(self, toolbars):
     if toolbars:
       for toolbar in toolbars:
-        self.output.write("Toolbar - %s - " % toolbar["objname"].decode("utf-8"))
-        self.output.write("%s - " % toolbar["subkey"].decode("utf-8"))
-        self.output.write("%s\n" % toolbar["exepath"].decode("utf-8"))
+        self.output.write("Toolbar - %s - " % toolbar["objname"].decode("iso8859-1"))
+        self.output.write("%s - " % toolbar["subkey"].decode("iso8859-1"))
+        self.output.write("%s\n" % toolbar["exepath"].decode("iso8859-1"))
   
   
   def registers(self, regs, IEComponents, IEToolbars, global_startups, user_startups,
@@ -75,12 +75,12 @@ class Printer(object):
         self.DNS(primaryDNS, secondaryDNS, adapterID)
         self.winlogon(winlogon_entries)
         continue
-      self.output.write("%s\n" % reg.decode("utf-8"))
+      self.output.write("%s\n" % reg.decode("iso8859-1"))
   
   
   def LSP(self, LSPs):
     for LSP in LSPs:
-      self.output.write("LSP - %s: %s\n" % (LSP[0].decode("utf-8"), LSP[1].decode("utf-8")))
+      self.output.write("LSP - %s: %s\n" % (LSP[0].decode("iso8859-1"), LSP[1].decode("iso8859-1")))
   
   
   def DNS(self, primaryDNS, secondaryDNS, adapterID):
@@ -100,14 +100,14 @@ class Printer(object):
   def mountpoints(self, suspect_mountpoints):
       if suspect_mountpoints:
         for mountpoint in suspect_mountpoints:
-          self.output.write("MountPoints2: %s - %s\n" % (mountpoint[0].decode("utf-8"), mountpoint[1].decode("utf-8")))
+          self.output.write("MountPoints2: %s - %s\n" % (mountpoint[0].decode("iso8859-1"), mountpoint[1].decode("iso8859-1")))
   
   
   def services(self, svcs):
     self.sessionTitle("Services")
     if svcs:
       for svc in svcs:
-        self.output.write(svc.decode("utf-8"))
+        self.output.write(svc.decode("iso8859-1"))
         self.output.write("\n")
     else:
       self.output.write("Nothing unusual\n")
@@ -117,7 +117,7 @@ class Printer(object):
     self.sessionTitle("Drivers")
     if drvs:
       for drv in drvs:
-        self.output.write(drv.decode("utf-8"))
+        self.output.write(drv.decode("iso8859-1"))
         self.output.write("\n")
     else:
       self.output.write("Nothing unusual\n")
@@ -129,7 +129,7 @@ class Printer(object):
       self.output.write("NetSvc: No anomalies were found\n\n")
     else:
       for anomalie in anomalies:
-        self.output.write("NetSvc: {0:20} - {1:20}\n\n".format(str(anomalie[0]), str(anomalie[1])))
+        self.output.write("NetSvc: {0} - {1}\n\n".format(str(anomalie[0]), str(anomalie[1])))
   
   
   def safeboot(self, safeboot_exists):
@@ -141,25 +141,25 @@ class Printer(object):
     if user_startups:
       self.output.write("Startups: ")
       for startup in user_startups:
-        self.output.write("%s " % str(user_startups).strip().decode("utf-8"))
+        self.output.write("%s " % str(user_startups).strip().decode("iso8859-1"))
       self.output.write("\n")
     if global_startups:
       self.output.write("Global: ")
       for startup in global_startups:
-        self.output.write("%s " % str(startup).strip().decode("utf-8"))
+        self.output.write("%s " % str(startup).strip().decode("iso8859-1"))
       self.output.write("\n")
   
   
   def winlogon(self, winlogon_entries):
     if winlogon_entries:
       for entry in winlogon_entries:
-        self.output.write("Notify: %s => %s\n" % (entry[0].decode("utf-8"), entry[1].decode("utf-8")))
+        self.output.write("Notify: %s => %s\n" % (entry[0].decode("iso8859-1"), entry[1].decode("iso8859-1")))
   
   
   def IFEO(self, files):
     if files:
       for f in files:
-        self.output.write("IFEO - {0:20}: Debugger={1:20}\n".format(f[0].decode("utf-8"), f[1].decode("utf-8")))
+        self.output.write("IFEO - {0}: Debugger={1}\n".format(f[0].decode("iso8859-1"), f[1].decode("iso8859-1")))
       self.output.write("\n")
   
   
@@ -167,7 +167,7 @@ class Printer(object):
     self.sessionTitle("File Association")
     if misassociations:
       for misassociation in misassociations:
-        self.output.write("HKLM\..\%s: %s\n" % (misassociation[0].decode("utf-8"), misassociation[1].decode("utf-8")))
+        self.output.write("HKLM\..\%s: %s\n" % (misassociation[0].decode("iso8859-1"), misassociation[1].decode("iso8859-1")))
       self.output.write("\n")
     else:
       self.output.write("> ok\n")
