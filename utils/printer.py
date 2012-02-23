@@ -93,14 +93,14 @@ class Printer(object):
   def autoruns(self, autoruns_list):
     if autoruns_list:
       for autorun in autoruns_list:
-        self.output.write("Autorun: %s\\Autorun present!\n" % autorun)
+        self.output.write("Autorun: %s\\ Autorun present!\n" % autorun)
       self.output.write("\n\n")
   
   
   def mountpoints(self, suspect_mountpoints):
       if suspect_mountpoints:
         for mountpoint in suspect_mountpoints:
-          self.output.write("MountPoints: %s - %s\n" % (mountpoint[0].decode("utf-8"), mountpoint[1].decode("utf-8")))
+          self.output.write("MountPoints2: %s - %s\n" % (mountpoint[0].decode("utf-8"), mountpoint[1].decode("utf-8")))
   
   
   def services(self, svcs):
@@ -167,7 +167,7 @@ class Printer(object):
     self.sessionTitle("File Association")
     if misassociations:
       for misassociation in misassociations:
-        self.output.write("HKLM - %s: %s\n" % (misassociation[0].decode("utf-8"), misassociation[1].decode("utf-8")))
+        self.output.write("HKLM\..\%s: %s\n" % (misassociation[0].decode("utf-8"), misassociation[1].decode("utf-8")))
       self.output.write("\n")
     else:
       self.output.write("> ok\n")

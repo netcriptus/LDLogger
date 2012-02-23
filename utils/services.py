@@ -44,7 +44,7 @@ def getLSP():
                   "SYSTEM\CurrentControlSet\Services\WinSock2\Parameters\Protocol_Catalog9\Catalog_Entries\%s" % folder,
                   "PackedCatalogItem")
     folder_path = folder_path.split(".dll")[0] + ".dll"
-    lsp_list.append(("Arquivo %s" % folder_num, folder_path))
+    lsp_list.append(("Catalog_Entry %s" % folder_num, folder_path))
   return num_entries, lsp_list
 
 
@@ -80,7 +80,7 @@ def checkAssociations(associations):
     expected_value = associations[full_key]
     value = regOps.getRegistryValue(key, subkey, "")
     if value != expected_value:
-      anomalies.append((subkey.split("\\")[-1], value))
+      anomalies.append((subkey.split("Classes\\")[-1].split("\\")[0], value))
       
   return anomalies
 

@@ -60,7 +60,7 @@ def main(argv):
     # Getting running processes and the path to its exetuable
     running_processes_list = []
     for process, process_path in processes.running_processes():
-      running_processes_list.append("{0:30}  ==>  {1:30}\n".format(process.decode("utf-8"), process_path.decode("utf-8")))
+      running_processes_list.append("{0}\n".format(process_path.decode("utf-8")))
   except Exception as err:
     log_error("running processes", err)
     
