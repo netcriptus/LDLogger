@@ -29,9 +29,9 @@ def getStartups():
                                                "Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders\\", "Startup")
   global_startup_path = regOps.getRegistryValue("HKEY_CURRENT_USER",
                                                  "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders\\", "Startup")
-  user_startups = subprocess.check_output(["dir", "/a/b", user_startup_path], shell=True)
+  user_startups = subprocess.check_output(["dir", "/a/b", user_startup_path.decode("iso8859-1")], shell=True)
   user_startups = user_startups.split("\n")
-  global_startups = subprocess.check_output(["dir", "/a/b", global_startup_path], shell=True)
+  global_startups = subprocess.check_output(["dir", "/a/b", global_startup_path.decode("iso8859-1")], shell=True)
   global_startups = global_startups.split("\n")
   for startup in list(user_startups):
     if startup == "" or startup.strip().lower().endswith(".ini"):

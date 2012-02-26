@@ -13,6 +13,9 @@ class Printer(object):
   def printVersion(self):
     self.output.write("LDLogger Versão ")
     self.output.write(self.version)
+    self.output.write(" - Lain Experiment")
+    self.output.write("\n")
+    self.output.write("http://www.linhadefensiva.org/ldlogger/")
     self.output.write("\n")
   
   

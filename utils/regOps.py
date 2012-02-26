@@ -88,7 +88,7 @@ def getRegs(reg_list):
         content = getRegistryValue(reg_key["key"], reg_key["subkey"], value)
         if not content:
           continue
-        regs.append(reg_key["tag"] + str(value) + ": " + str(content))
+        regs.append(reg_key["tag"] + str(value).decode("iso8859-1") + ": " + str(content).decode("iso8859-1"))
       except WindowsError:
         continue
   return regs

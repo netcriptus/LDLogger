@@ -90,8 +90,16 @@ def searchAutorun():
   fixed_devices = [device for device in devices if GetDriveType(device) == DRIVE_FIXED]
   
   for device in fixed_devices:
-    device_content = subprocess.check_output(["dir", "/a/b", device + "\\"], shell=True)
-    if "autorun.inf" in device_content or "autorun.exe" in device_content:
-      autoruns.append(device)
+    try:
+      device_content = subprocess.check_output(["dir", "/a/b", device + "\\"], shell=True)
+      if "autorun.inf" in device_content or "autorun.exe" in device_content:
+        autoruns.append(device)
+    except Exception as err:
+      status = open("error.txt", "a")
+      status.write("There seems to be a problem on %s\n\n%s\n" % ("searchAutoruns", str(type(err))))
+      status.write("%s" % str(err.message))
+      status.write("%s" % str(err.args))
+      status.write("\n\n")
+      status.close()
   return autoruns or None
     
