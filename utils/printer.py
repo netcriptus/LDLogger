@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# encoding: utf-8
+# encoding: iso8859-1
 
 
 from datetime import datetime
@@ -78,7 +78,7 @@ class Printer(object):
         self.DNS(primaryDNS, secondaryDNS, adapterID)
         self.winlogon(winlogon_entries)
         continue
-      self.output.write("%s\n" % reg.decode("iso8859-1"))
+      self.output.write("%s\n" % reg)
   
   
   def LSP(self, LSPs):

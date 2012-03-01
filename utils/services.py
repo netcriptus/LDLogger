@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# encoding: utf-8
+# encoding: iso8859-1
 
 import regOps
 from os import getenv

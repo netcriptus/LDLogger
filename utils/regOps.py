@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# encoding: utf-8
+# encoding: iso8859-1
 """
 regOps.py
 
@@ -7,7 +7,7 @@ Created by Fernando Cezar on 2011-12-02.
 Copyright (c) 2011 __MyCompanyName__. All rights reserved.
 """
 import _winreg
-
+import types
 
 def discoverValues(key, subkey):
   """
@@ -17,16 +17,18 @@ def discoverValues(key, subkey):
   try:
     key = getattr(_winreg, key)
     handle = _winreg.OpenKey(key, subkey)
-    num_entries = _winreg.EnumValue(handle, 0)[-1]
-    values = []
-    for i in range(num_entries):
-      try:
-        values.append(_winreg.EnumValue(handle, i)[0])
-      except WindowsError:
-        continue
-    return values
   except WindowsError:
     return None
+  values = []
+  i = 0
+  while True:
+    try:
+      curr_value = _winreg.EnumValue(handle, i)[0]
+    except WindowsError:
+      break
+    values.append(curr_value)
+    i += 1
+  return values or None
 
 
 def discoverSubkeys(key, subkey):
@@ -63,6 +65,23 @@ def getRegistryValue(key, subkey, value):
     return None
 
 
+def smart_str(s, encoding='utf-8', errors='strict', from_encoding='iso8859-1'):
+  if type(s) in (int, long, float, types.NoneType):
+      return str(s)
+  elif type(s) is str:
+      if encoding != from_encoding:
+        return s.decode(from_encoding, errors).encode(encoding, errors)
+      else:
+          return s
+  elif type(s) is unicode:
+      return s.encode(encoding, errors)
+  elif hasattr(s, '__str__'):
+      return smart_str(str(s), encoding, errors, from_encoding)
+  elif hasattr(s, '__unicode__'):
+      return smart_str(unicode(s), encoding, errors, from_encoding)
+  else:
+      return smart_str(str(s), encoding, errors, from_encoding)
+
 def getRegs(reg_list):
   """
   Given a list with keys, subkeys and values, it returns the content of those
@@ -88,7 +107,7 @@ def getRegs(reg_list):
         content = getRegistryValue(reg_key["key"], reg_key["subkey"], value)
         if not content:
           continue
-        regs.append(reg_key["tag"] + str(value).decode("iso8859-1") + ": " + str(content).decode("iso8859-1"))
+        regs.append("%s%s: %s" % (reg_key["tag"], smart_str(value), smart_str(content)))
       except WindowsError:
         continue
   return regs
