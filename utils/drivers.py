@@ -53,13 +53,19 @@ def parseSC(query_type, raw_info, whitelist):
 
 
 def getServices(whitelist):
-  serv = subprocess.check_output("sc query type= service", shell = True)
+  try:
+    serv = subprocess.check_output("sc query type= service", shell = True)
+  except subprocess.CalledProcessError:
+    return ["Este computador não executa o comando sc. Impossível descobrir serviços."]
   serv = parseSC("SRV", serv, whitelist)
   return serv
 
 
 def getDrivers(whitelist):
-  drvs = subprocess.check_output("sc query type= driver", shell = True)
+  try:
+    drvs = subprocess.check_output("sc query type= driver", shell = True)
+  except subprocess.CalledProcessError:
+    return ["Este computador não executa o comando sc. Impossível descobrir drivers."]
   drvs = parseSC("DRV", drvs, whitelist)
   return drvs
 

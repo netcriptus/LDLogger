@@ -65,22 +65,20 @@ def getRegistryValue(key, subkey, value):
     return None
 
 
-def smart_str(s, encoding='utf-8', errors='strict', from_encoding='iso8859-1'):
+def smart_str(s, encoding='utf-8', errors='ignore', from_encoding='iso8859-1'):
   if type(s) in (int, long, float, types.NoneType):
-      return str(s)
+    return str(s)
   elif type(s) is str:
-      if encoding != from_encoding:
-        return s.decode(from_encoding, errors).encode(encoding, errors)
-      else:
-          return s
+      return s.decode(from_encoding, errors).encode(encoding, errors)
   elif type(s) is unicode:
-      return s.encode(encoding, errors)
+    return s.encode(encoding, errors)
   elif hasattr(s, '__str__'):
-      return smart_str(str(s), encoding, errors, from_encoding)
+    return smart_str(str(s), encoding, errors, from_encoding)
   elif hasattr(s, '__unicode__'):
-      return smart_str(unicode(s), encoding, errors, from_encoding)
+    return smart_str(unicode(s), encoding, errors, from_encoding)
   else:
-      return smart_str(str(s), encoding, errors, from_encoding)
+    return smart_str(str(s), encoding, errors, from_encoding)
+
 
 def getRegs(reg_list):
   """
@@ -107,7 +105,24 @@ def getRegs(reg_list):
         content = getRegistryValue(reg_key["key"], reg_key["subkey"], value)
         if not content:
           continue
-        regs.append("%s%s: %s" % (reg_key["tag"], smart_str(value), smart_str(content)))
+        try:
+          value = smart_str(value)
+        except Exception as err:
+          log_error("smart_str value type: %s" % type(value), err)
+        try:
+          content = smart_str(content)
+        except Exception as err:
+          log_error("smart_str content type: %s" % type(content), err)
+        regs.append("%s%s: %s" % (reg_key["tag"], value, content))
       except WindowsError:
         continue
   return regs
+  
+  
+def log_error(local, err):
+  status = open("error.txt", "a")
+  status.write("There seems to be a problem on %s\n\n%s\n" % (local, str(type(err))))
+  status.write("%s" % str(err.message))
+  status.write("%s" % str(err.args))
+  status.write("\n\n")
+  status.close()
