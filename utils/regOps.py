@@ -108,21 +108,12 @@ def getRegs(reg_list):
         try:
           value = smart_str(value)
         except Exception as err:
-          log_error("smart_str value type: %s" % type(value), err)
+          errorHandler.logError("smart_str value type: %s" % type(value), err)
         try:
           content = smart_str(content)
         except Exception as err:
-          log_error("smart_str content type: %s" % type(content), err)
+          errorHandler.logError("smart_str content type: %s" % type(content), err)
         regs.append("%s%s: %s" % (reg_key["tag"], value, content))
       except WindowsError:
         continue
   return regs
-  
-  
-def log_error(local, err):
-  status = open("error.txt", "a")
-  status.write("There seems to be a problem on %s\n\n%s\n" % (local, str(type(err))))
-  status.write("%s" % str(err.message))
-  status.write("%s" % str(err.args))
-  status.write("\n\n")
-  status.close()

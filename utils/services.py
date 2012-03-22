@@ -122,7 +122,7 @@ def getImageFilesOptions():
 
 def getHosts():
   try:
-    fp = open(getenv("WINDIR") + "\System32\drivers\etc\hosts")
+    fp = open(getenv("WINDIR") + "\System32\drivers\etc\hosts", "r")
   except IOError:
     return ["Arquivo Hosts não existe em " + getenv("WINDIR") + "\System32\drivers\etc\hosts"]
   lines = fp.readlines()

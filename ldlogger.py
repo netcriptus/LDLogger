@@ -9,24 +9,12 @@ Copyright (c) 2011 __8bitsweb__. All rights reserved.
 
 VERSION = "1.2 Beta"
 
-
-def log_error(local, err):
-  status = open("error.txt", "a")
-  status.write("There seems to be a problem on %s\n\n%s\n" % (local, str(type(err))))
-  status.write("%s" % str(err.message))
-  status.write("%s" % str(err.args))
-  status.write("\n\n")
-  status.close()
-
+import sys
+from platform import win32_ver, architecture
+from lists import *
+from utils import regOps, processes, services, drivers, printer, commandHandler, errorHandler
 
 try:
-  import sys
-  import subprocess
-  from platform import win32_ver, architecture
-  from lists import *
-  from utils import regOps, processes, services, drivers, printer
-  from datetime import datetime
-
   REG_KEYS = REG_KEYS_LIST.REG_KEYS
   BROWSERS = BROWSERS_LIST.BROWSERS
   svchost_whitelist = svchostWhitelist.svchost_whitelist
@@ -34,9 +22,8 @@ try:
   associations = associations.associations
   services_whitelist = srv_and_drvs_whitelist.services_whitelist
   drivers_whitelist = srv_and_drvs_whitelist.drivers_whitelist
-  
 except Exception as err:
-  log_error("importing", err)
+  errorHandler.logError("List instantiation", err)
 
   
 def main(argv):  
@@ -48,27 +35,27 @@ def main(argv):
     OS, build, service_pack = win32_ver()[:-1]
     arch = architecture()[0]
   except Exception as err:
-    log_error("platform use", err)
+    errorHandler.logError("platform use", err)
   
   try:
     # Getting used browsers and their versions
     browser_list = processes.getBrowsers(BROWSERS)
   except Exception as err:
-    log_error("browsers", err)
+    errorHandler.logError("browsers", err)
   
   try:
     # Getting running processes and the path to its exetuable
     running_processes_list = []
-    for process, process_path in processes.running_processes():
-      running_processes_list.append("{0}\n".format(process_path.decode("iso8859-1")))
+    for process_path in processes.running_processes():
+      running_processes_list.append("%s\n" % process_path)
   except Exception as err:
-    log_error("running processes", err)
+    errorHandler.logError("running processes", err)
     
   try:
     # Getting Hosts file
     hosts = services.getHosts()
   except Exception as err:
-    log_error("hosts", err)
+    errorHandler.logError("hosts", err)
   
   try:
     # Getting IE components
@@ -78,7 +65,7 @@ def main(argv):
                   "subkey": "CLSID\%s\InprocServer32"}
     IEComponents = processes.getComponents(source_reg, target_reg)
   except Exception as err:
-    log_error("IE components", err)
+    errorHandler.logError("IE components", err)
   
   try:
     # Getting IE toolbars
@@ -88,85 +75,85 @@ def main(argv):
                   "subkey": "CLSID\%s\InprocServer32"}
     IEToolbars = processes.getComponents(source_reg, target_reg, as_subkeys=False)
   except Exception as err:
-    log_error("ie toolbars", err)
+    errorHandler.logError("ie toolbars", err)
   
   try:
     # Getting some important keys in register
     regs = regOps.getRegs(REG_KEYS)
   except Exception as err:
-    log_error("registry keys", err)
+    errorHandler.logError("registry keys", err)
     
   try:
     # Getting LSP's
     num_entries, LSPs = services.getLSP()
   except Exception as err:
-    log_error("LSP", err)
+    errorHandler.logError("LSP", err)
     
   try:
     # Getting DNS
     primaryDNS, secondaryDNS, adapterID = services.getDNS()
   except Exception as err:
-    log_error("DNS", err)
+    errorHandler.logError("DNS", err)
   
   try:
     # Searching autoruns
     autoruns = drivers.searchAutorun()
   except Exception as err:
-    log_error("autoruns", err)
+    errorHandler.logError("autoruns", err)
   
   try:
     # Looking mountpoints
     suspect_mountpoints = drivers.getMountpoints()
   except Exception as err:
-    log_error("mountpoints", err)
+    errorHandler.logError("mountpoints", err)
   
   try:
     # Getting Services
     svcs = drivers.getServices(services_whitelist)
   except Exception as err:
-    log_error("services", err)
+    errorHandler.logError("services", err)
   
   try:
     # Getting Drivers
     drvs = drivers.getDrivers(drivers_whitelist)
   except Exception as err:
-    log_error("drivers", err)
+    errorHandler.logError("drivers", err)
   
   try:
     # Searching for anomalies on svchost
     anomalies = services.getSvchostAnomalies(svchost_whitelist)
   except Exception as err:
-    log_error("svchost", err)
+    errorHandler.logError("svchost", err)
   
   try:  
     # Discovering if safe boot exists
     safeboot = services.safeBootExists()
   except Exception as err:
-    log_error("safe boot", err)
+    errorHandler.logError("safe boot", err)
   
   try:
     # Getting startups:
     global_startups, user_startups = processes.getStartups()
   except Exception as err:
-    log_error("startups", err)
+    errorHandler.logError("startups", err)
   
   try:
     # Getting strange winlogon entries
     winlogon_entries = services.getWinlogonEntries(winlogon_whitelist)
   except Exception as err:
-    log_error("winlogon", err)
+    errorHandler.logError("winlogon", err)
   
   try:
     # Getting Image File Execution Options
     files = services.getImageFilesOptions()
   except Exception as err:
-    log_error("image file execution", err)
+    errorHandler.logError("image file execution", err)
   
   try:
     # Getting file extension association
     misassociations = services.checkAssociations(associations)
   except Exception as err:
-    log_error("file association", err)
+    errorHandler.logError("file association", err)
   
   
   try:
@@ -187,10 +174,10 @@ def main(argv):
     output.fileAssociation(misassociations)
     output.finishLog()
   except Exception as err:
-    log_error("write output", err)
+    errorHandler.logError("write output", err)
     
   
-  subprocess.call("start notepad LDLogger.txt", shell=True)
+  commandHandler.execute("start notepad LDLogger.txt")
   return 0
 
 

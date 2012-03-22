@@ -2,7 +2,8 @@
 # encoding: iso8859-1
 
 import regOps
-import subprocess
+import errorHandler
+import commandHandler
 from win32api import GetFileVersionInfo, GetLogicalDriveStrings
 from win32file import GetDriveType, DRIVE_FIXED
 from os import getenv
@@ -54,8 +55,9 @@ def parseSC(query_type, raw_info, whitelist):
 
 def getServices(whitelist):
   try:
-    serv = subprocess.check_output("sc query type= service", shell = True)
-  except subprocess.CalledProcessError:
+    serv = commandHandler.getOutput("sc query type= service")
+  except Exception as err:
+    errorHandler.logError("sc calling\nThis computer can't execute sc", err)
     return ["Este computador não executa o comando sc. Impossível descobrir serviços."]
   serv = parseSC("SRV", serv, whitelist)
   return serv
@@ -63,8 +65,9 @@ def getServices(whitelist):
 
 def getDrivers(whitelist):
   try:
-    drvs = subprocess.check_output("sc query type= driver", shell = True)
-  except subprocess.CalledProcessError:
+    drvs = commandHandler.getOutput("sc query type= driver")
+  except Exception as err:
+    errorHandler.logError("sc calling\nThis computer can't execute sc", err)
     return ["Este computador não executa o comando sc. Impossível descobrir drivers."]
   drvs = parseSC("DRV", drvs, whitelist)
   return drvs
@@ -97,15 +100,10 @@ def searchAutorun():
   
   for device in fixed_devices:
     try:
-      device_content = subprocess.check_output(["dir", "/a/b", device + "\\"], shell=True)
+      device_content = commandHandler.getOutput(["dir", "/a/b", device + "\\"])
       if "autorun.inf" in device_content or "autorun.exe" in device_content:
         autoruns.append(device)
     except Exception as err:
-      status = open("error.txt", "a")
-      status.write("There seems to be a problem on %s\n\n%s\n" % ("searchAutoruns", str(type(err))))
-      status.write("%s" % str(err.message))
-      status.write("%s" % str(err.args))
-      status.write("\n\n")
-      status.close()
+      errorHandler.logError("searchAutoruns", err)
   return autoruns or None
     

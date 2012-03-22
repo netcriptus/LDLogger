@@ -2,7 +2,8 @@
 # encoding: iso8859-1
 
 import regOps
-import subprocess
+import errorHandler
+import commandHandler
 
 def browser_version(browser_dict):
   try:
@@ -15,23 +16,26 @@ def browser_version(browser_dict):
 
 
 def running_processes():
-  processes_list = subprocess.check_output("wmic process get description,executablepath", shell=True)
-  processes_list = processes_list.split("\n")[3:]
+  processes_list = commandHandler.getOutput("wmic process get description,executablepath")
+  if not processes_list:
+    yield "This computer can't execute wmic"
+  else:
+    processes_list = processes_list.split("\n")[3:]
   
   for line in processes_list:
     parsed_line = line.strip().split(" ")
     if parsed_line:
-      yield parsed_line[0], " ".join(parsed_line[1:]).strip()
+      yield " ".join(parsed_line[1:]).strip()
 
 
 def getStartups():
   user_startup_path = regOps.getRegistryValue("HKEY_CURRENT_USER",
                                                "Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders\\", "Startup")
-  global_startup_path = regOps.getRegistryValue("HKEY_CURRENT_USER",
-                                                 "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders\\", "Startup")
-  user_startups = subprocess.check_output(["dir", "/a/b", user_startup_path.decode("iso8859-1")], shell=True)
+  global_startup_path = regOps.getRegistryValue("HKEY_LOCAL_MACHINE",
+                                                 "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders\\", "common startup")
+  user_startups = commandHandler.getOutput(["dir", "/a/b", user_startup_path.decode("iso8859-1")])
   user_startups = user_startups.split("\n")
-  global_startups = subprocess.check_output(["dir", "/a/b", global_startup_path.decode("iso8859-1")], shell=True)
+  global_startups = commandHandler.getOutput(["dir", "/a/b", global_startup_path.decode("iso8859-1")])
   global_startups = global_startups.split("\n")
   for startup in list(user_startups):
     if startup == "" or startup.strip().lower().endswith(".ini"):
