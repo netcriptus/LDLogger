@@ -7,12 +7,12 @@ Created by Fernando Cezar on 2011-11-30.
 Copyright (c) 2011 __8bitsweb__. All rights reserved.
 """
 
-VERSION = "1.2 Beta"
+VERSION = "1.3 Beta"
 
 import sys
 from platform import win32_ver, architecture
 from lists import *
-from utils import regOps, processes, services, drivers, printer, commandHandler, errorHandler
+from utils import regOps, processes, services, drivers, printer, commandHandler, errorHandler, smartStr
 
 try:
   REG_KEYS = REG_KEYS_LIST.REG_KEYS
