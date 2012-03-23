@@ -4,6 +4,7 @@
 import regOps
 import errorHandler
 import commandHandler
+import smartStr
 from win32api import GetFileVersionInfo, GetLogicalDriveStrings
 from win32file import GetDriveType, DRIVE_FIXED
 from os import getenv
@@ -49,7 +50,12 @@ def parseSC(query_type, raw_info, whitelist):
       if service_name in whitelist:
         continue
       state = line.strip().split(" ")[-1]
-      parsed_sc.append("%s - %s (%s) - %s - %s" %(query_type, display_name, service_name, company_name, image_path))
+      query_type = smartStr.normalize(query_type)
+      display_name = smartStr.normalize(display_name)
+      service_name = smartStr.normalize(service_name)
+      company_name = smartStr.normalize(company_name)
+      image_path = smartStr.normalize(image_path)
+      parsed_sc.append("%s - %s (%s) - %s - %s" % (query_type, display_name, service_name, company_name, image_path))
   return parsed_sc
 
 
@@ -85,7 +91,7 @@ def getMountpoints():
             
                                     
     if value:
-      suspects.append([mountpoint, value])
+      suspects.append([smartStr.normalize(mountpoint), smartStr.normalize(value)])
   return suspects or None
 
 

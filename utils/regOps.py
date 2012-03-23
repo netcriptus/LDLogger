@@ -7,7 +7,8 @@ Created by Fernando Cezar on 2011-12-02.
 Copyright (c) 2011 __MyCompanyName__. All rights reserved.
 """
 import _winreg
-import types
+import smartStr
+import errorHandler
 
 def discoverValues(key, subkey):
   """
@@ -65,21 +66,6 @@ def getRegistryValue(key, subkey, value):
     return None
 
 
-def smart_str(s, encoding='utf-8', errors='ignore', from_encoding='iso8859-1'):
-  if type(s) in (int, long, float, types.NoneType):
-    return str(s)
-  elif type(s) is str:
-      return s.decode(from_encoding, errors).encode(encoding, errors)
-  elif type(s) is unicode:
-    return s.encode(encoding, errors)
-  elif hasattr(s, '__str__'):
-    return smart_str(str(s), encoding, errors, from_encoding)
-  elif hasattr(s, '__unicode__'):
-    return smart_str(unicode(s), encoding, errors, from_encoding)
-  else:
-    return smart_str(str(s), encoding, errors, from_encoding)
-
-
 def getRegs(reg_list):
   """
   Given a list with keys, subkeys and values, it returns the content of those
@@ -102,18 +88,12 @@ def getRegs(reg_list):
       
     for value in values:
       try:
-        content = getRegistryValue(reg_key["key"], reg_key["subkey"], value)
+        content = getRegistryValue(reg_key["key"], reg_key["subkey"], smartStr.normalize(value))
         if not content:
           continue
-        try:
-          value = smart_str(value)
-        except Exception as err:
-          errorHandler.logError("smart_str value type: %s" % type(value), err)
-        try:
-          content = smart_str(content)
-        except Exception as err:
-          errorHandler.logError("smart_str content type: %s" % type(content), err)
-        regs.append("%s%s: %s" % (reg_key["tag"], value, content))
+        regs.append("%s%s: %s" % (smartStr.normalize(reg_key["tag"]),
+                                  smartStr.normalize(value),
+                                  smartStr.normalize(content)))
       except WindowsError:
         continue
   return regs

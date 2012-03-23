@@ -4,6 +4,7 @@
 import regOps
 import errorHandler
 import commandHandler
+import smartStr
 
 def browser_version(browser_dict):
   try:
@@ -25,7 +26,7 @@ def running_processes():
   for line in processes_list:
     parsed_line = line.strip().split(" ")
     if parsed_line:
-      yield " ".join(parsed_line[1:]).strip()
+      yield smartStr.normalize(" ".join(parsed_line[1:])).strip()
 
 
 def getStartups():
@@ -70,9 +71,9 @@ def getComponents(source_reg, target_reg, as_subkeys = True):
       subkey_name = subkey
       objname = regOps.getRegistryValue(source_reg["key"], source_reg["subkey"] + "\\" + subkey, "") or "no name"
       exepath = regOps.getRegistryValue(target_reg["key"], target_reg["subkey"] % subkey, "") or "file missing"
-      components.append({"subkey": subkey_name,
-                        "objname": objname,
-                        "exepath": exepath})
+      components.append({"subkey": smartStr.normalize(subkey_name),
+                        "objname": smartStr.normalize(objname),
+                        "exepath": smartStr.normalize(exepath)})
   return components
 
 

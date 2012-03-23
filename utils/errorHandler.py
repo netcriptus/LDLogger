@@ -14,3 +14,10 @@ def logError(local, error):
   status.write("%s" % str(error.args))
   status.write("\n\n")
   status.close()
+
+
+def logMessage(local, message):
+  status = open("error.txt", "a")
+  status.write("There seems to be a problem on %s\n\n%s\n" % (local, message))
+  status.write("\n\n")
+  status.close()
