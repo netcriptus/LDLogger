@@ -21,7 +21,7 @@ class Printer(object):
   
   
   def sessionTitle(self, title):
-    self.output.write("\n\t#===== %s =====#\n\n" % title)
+    self.output.write("\n#===== %s =====#\n\n" % title)
   
   def systemInfo(self, OS, build, service_pack, arch):
     self.sessionTitle("System")
@@ -133,7 +133,7 @@ class Printer(object):
       self.output.write("NetSvc: No anomalies were found\n\n")
     else:
       for anomalie in anomalies:
-        self.output.write("NetSvc: {0} - {1}\n\n".format(str(anomalie[0]), str(anomalie[1])))
+        self.output.write("NetSvc: {0} - {1}\n".format(str(anomalie[0]), str(anomalie[1])))
   
   
   def safeboot(self, safeboot_exists):

@@ -9,4 +9,8 @@ BROWSERS = {"IE": {"key": "HKEY_LOCAL_MACHINE",
                         "name": "Mozilla Firefox"},
             "CHROME": {"key": "HKEY_CURRENT_USER",
                        "subkey": "Software\Microsoft\Windows\CurrentVersion\Uninstall\Google Chrome",
-                       "name": "Google Chrome"}}
+                       "name": "Google Chrome"},
+            #"OPERA": {"key": "HKEY_LOCAL_MACHINE",
+            #          "subkey": "Software\Microsoft\Windows\CurrentVersion\Uninstall\Google Chrome",
+            #          "name": "Opera"}
+                      }

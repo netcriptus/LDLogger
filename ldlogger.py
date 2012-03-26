@@ -7,7 +7,7 @@ Created by Fernando Cezar on 2011-11-30.
 Copyright (c) 2011 __8bitsweb__. All rights reserved.
 """
 
-VERSION = "1.3 Beta"
+VERSION = "1.3.1 Beta"
 
 import sys
 from platform import win32_ver, architecture

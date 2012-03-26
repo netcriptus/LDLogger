@@ -24,9 +24,9 @@ def running_processes():
     processes_list = processes_list.split("\n")[3:]
   
   for line in processes_list:
-    parsed_line = line.strip().split(" ")
+    parsed_line = smartStr.normalize(line.strip()).split(" ")
     if parsed_line:
-      yield smartStr.normalize(" ".join(parsed_line[1:])).strip()
+      yield " ".join(parsed_line[1:]).strip()
 
 
 def getStartups():
@@ -34,9 +34,9 @@ def getStartups():
                                                "Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders\\", "Startup")
   global_startup_path = regOps.getRegistryValue("HKEY_LOCAL_MACHINE",
                                                  "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders\\", "common startup")
-  user_startups = commandHandler.getOutput(["dir", "/a/b", user_startup_path.decode("iso8859-1")])
+  user_startups = commandHandler.getOutput(["dir", "/a/b", smartStr.normalize(user_startup_path)])
   user_startups = user_startups.split("\n")
-  global_startups = commandHandler.getOutput(["dir", "/a/b", global_startup_path.decode("iso8859-1")])
+  global_startups = commandHandler.getOutput(["dir", "/a/b", smartStr.normalize(global_startup_path)])
   global_startups = global_startups.split("\n")
   for startup in list(user_startups):
     if startup == "" or startup.strip().lower().endswith(".ini"):

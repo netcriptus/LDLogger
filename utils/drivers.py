@@ -110,6 +110,6 @@ def searchAutorun():
       if "autorun.inf" in device_content or "autorun.exe" in device_content:
         autoruns.append(device)
     except Exception as err:
-      errorHandler.logError("searchAutoruns", err)
-  return autoruns or None
+      continue
+  return autoruns
     
