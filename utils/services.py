@@ -125,11 +125,15 @@ def getHosts():
     fp = open(getenv("WINDIR") + "\System32\drivers\etc\hosts", "r")
   except IOError:
     return ["Arquivo Hosts não existe em " + getenv("WINDIR") + "\System32\drivers\etc\hosts"]
-  lines = fp.readlines()
+  
+  i = 0
+  lines = []
+  line = fp.readline()
+  while i < 10 and line != "":
+    if not line.startswith("#") and not line.startswith("\n"):
+      lines.append(line)
+      i += 1
+    line = fp.readline()
   fp.close()
-    
-  for line in list(lines):
-    if line.startswith("#") or line.startswith("\n"):
-      lines.remove(line)
       
   return lines

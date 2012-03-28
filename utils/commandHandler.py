@@ -14,12 +14,12 @@ def execute(command):
   try:
     subprocess.call(command, shell=True)
   except Exception as err:
-    errorHandler.errorLog("executing %s " % str(command))
+    errorHandler.errorLog("executing %s " % str(command), err)
 
 
 def getOutput(command):
   try:
     return subprocess.check_output(command, shell=True)
   except Exception as err:
-    errorHandler.logError("getOutput of %s " % str(command))
+    errorHandler.logError("getOutput of %s " % str(command), err)
     return ""
