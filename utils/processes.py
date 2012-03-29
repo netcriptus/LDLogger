@@ -26,7 +26,7 @@ def running_processes():
   for line in processes_list:
     parsed_line = smartStr.normalize(line.strip()).split(" ")
     if parsed_line:
-      yield " ".join(parsed_line[1:]).strip()
+      yield smartStr.normalize(" ".join(parsed_line[1:]).strip())
 
 
 def getStartups():
@@ -46,8 +46,8 @@ def getStartups():
     if startup == "" or startup.strip().lower().endswith(".ini"):
       global_startups.remove(startup)
       
-  global_startups = global_startups
-  user_startups = user_startups
+  global_startups = [smartStr.normalize(global_startup) for  global_startup in global_startups]
+  user_startups = [smartStr.normalize(user_startup) for user_startup in user_startups]
   return global_startups, user_startups
 
 
