@@ -11,6 +11,8 @@ import subprocess
 import errorHandler
 
 def execute(command):
+  """Given a command, it should be executed and show no return. If an error is
+  generated, it should be logged"""
   try:
     subprocess.call(command, shell=True)
   except Exception as err:
@@ -18,6 +20,8 @@ def execute(command):
 
 
 def getOutput(command):
+  """Executes a command in the prompt and returns its result. In case of an
+  error it returns am empty string"""
   try:
     return subprocess.check_output(command, shell=True)
   except Exception as err:
