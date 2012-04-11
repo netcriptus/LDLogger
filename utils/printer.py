@@ -44,10 +44,8 @@ class Printer(object):
   
   def hosts(self, hosts_file):
     self.sessionTitle("HOSTS")
-    for host in hosts_file[:15]:
+    for host in hosts_file:
       self.output.write("%s\n" % host.strip())
-    if len(hosts_file) > 15:
-      self.output.write("E mais %d entradas\n" % len(hosts) - 15)
   
   
   def BHO(self, components_list):
