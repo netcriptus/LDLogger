@@ -7,6 +7,10 @@ import commandHandler
 import smartStr
 
 def browser_version(browser_dict):
+  """Give information about a browser in the registry, tries to find out the
+  browser version. Returns None if not found, what means this browser is not
+  installed"""
+  
   try:
     version = regOps.getRegistryValue(browser_dict["key"], browser_dict["subkey"], "Version") or \
               regOps.getRegistryValue(browser_dict["key"], browser_dict["subkey"], "CurrentVersion")
@@ -17,8 +21,10 @@ def browser_version(browser_dict):
 
 
 def running_processes():
+  """Returns the running processes or an error message if that's not possible"""
+  
   processes_list = commandHandler.getOutput("wmic process get description,executablepath")
-  if not processes_list:
+  if processes_list == "":
     yield "This computer can't execute wmic"
   else:
     processes_list = processes_list.split("\n")[3:]
@@ -30,6 +36,8 @@ def running_processes():
 
 
 def getStartups():
+  """Returns two lists, with global startups ans user startups. The lists may
+  be empty if something goes wrong"""
   user_startup_path = regOps.getRegistryValue("HKEY_CURRENT_USER",
                                                "Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders\\", "Startup")
   global_startup_path = regOps.getRegistryValue("HKEY_LOCAL_MACHINE",
@@ -52,6 +60,9 @@ def getStartups():
 
 
 def getBrowsers(BROWSERS):
+  """Iterates a browser list searching for installed browsers. Returns a list
+  with the browsers found."""
+  
   browser_list = []
   for browser_info in BROWSERS.values():
     new_browser = browser_version(browser_info)
@@ -61,6 +72,8 @@ def getBrowsers(BROWSERS):
 
 
 def getComponents(source_reg, target_reg, as_subkeys = True):
+  """Looks for IE components, returning them on a dictionary"""
+  
   components = []
   if as_subkeys:
     subkeys = regOps.discoverSubkeys(source_reg["key"], source_reg["subkey"])
