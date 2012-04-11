@@ -8,6 +8,8 @@ Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 """
 
 def logError(local, error):
+  """Logs an error, giving information about where it happened."""
+  
   status = open("error.txt", "a")
   status.write("There seems to be a problem on %s\n\n%s\n" % (local, str(type(error))))
   status.write("%s" % str(error.message))
@@ -17,6 +19,8 @@ def logError(local, error):
 
 
 def logMessage(local, message):
+  """Logs a message if something unexpected happens, but it's an error"""
+  
   status = open("error.txt", "a")
   status.write("There seems to be a problem on %s\n\n%s\n" % (local, message))
   status.write("\n\n")
