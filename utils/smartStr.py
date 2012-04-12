@@ -10,6 +10,8 @@ import types
 import errorHandler
 
 def normalize(string):
+  """Given a string, returns it in UTF-8"""
+  
   possible_encodings = ["utf-8", "utf-16", "iso8859-1", "windows-1250",
                         "windows-1252", "windows-1251", "iso-8859-15"]
                         
@@ -22,7 +24,6 @@ def normalize(string):
       
   errorHandler.logMessage("normalization", "Could not decode %s" % repr(string))
   return "%s (Error decoding)" % repr(string)
-  
 
 
 def __smart_str(s, encoding='utf-8', errors='strict', from_encoding='iso8859-1'):
