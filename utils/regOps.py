@@ -35,7 +35,7 @@ def discoverValues(key, subkey):
 def discoverSubkeys(key, subkey):
   """
   Given a key and a subkey, what are the keys under this address?
-  It returns a list of values, or None, if the key and/or subkey are not valid
+  It returns a list of keys, or None, if the key and/or subkey are not valid
   """
   try:
     key = getattr(_winreg, key)

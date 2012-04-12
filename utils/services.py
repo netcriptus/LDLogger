@@ -5,10 +5,9 @@ import regOps
 from os import getenv
 
 def getSvchostAnomalies(whitelist):
-  """
-  Based on a whitelist, tries to detect weird entries on SVCHost.
-  If something is detected, it searches for the injected DLL.
-  """
+  """Based on a whitelist, tries to detect weird entries on SVCHost.
+  If something is detected, it searches for the injected DLL."""
+  
   anomalies = []
   values = regOps.getRegistryValue("HKEY_LOCAL_MACHINE", "SOFTWARE\Microsoft\Windows NT\CurrentVersion\SvcHost", "netsvcs")
   for value in values:
@@ -22,6 +21,8 @@ def getSvchostAnomalies(whitelist):
 
 
 def safeBootExists():
+  """Verify if safeboot is an option. Returns a boolean."""
+  
   safe_boot_regs = regOps.discoverSubkeys("HKEY_LOCAL_MACHINE", "SYSTEM\CurrentControlSet\Control\SafeBoot")
   if len(safe_boot_regs) == 0:
     return False
@@ -30,6 +31,8 @@ def safeBootExists():
 
 
 def getLSP():
+  """Returns a list with the LSP's"""
+  
   num_entries = regOps.getRegistryValue("HKEY_LOCAL_MACHINE",
                                         "SYSTEM\CurrentControlSet\Services\WinSock2\Parameters\Protocol_Catalog9",
                                         "Num_Catalog_Entries")
@@ -49,6 +52,8 @@ def getLSP():
 
 
 def getOutcastKeys(key, subkey, whitelist):
+  """Returns which values on a key and subkey are not part of the whitelist"""
+  
   outcasts = []
   entries = regOps.discoverSubkeys(key, subkey) or []
   for entry in entries:
@@ -58,6 +63,9 @@ def getOutcastKeys(key, subkey, whitelist):
 
 
 def getWinlogonEntries(whitelist):
+  """Searches for winlogon entries which are not part of the whitelist and
+  returns a list"""
+  
   key = "HKEY_LOCAL_MACHINE"
   subkey = "Software\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify"
   outcasts = getOutcastKeys(key, subkey, whitelist)
@@ -73,6 +81,9 @@ def getWinlogonEntries(whitelist):
 
 
 def checkAssociations(associations):
+  """Check which file assosiations are different from the expected values and
+  returns a list"""
+  
   anomalies = []
   for full_key in associations.keys():
     key = full_key.split("\\")[0]
@@ -86,6 +97,9 @@ def checkAssociations(associations):
 
 
 def getDNS():
+  """Returns the Network Adapter, primary and secondary DNS servers. Returns
+  None if no network adapter is found."""
+  
   key = "HKEY_LOCAL_MACHINE"
   path_to_adapter = "SYSTEM\CurrentControlSet\Control\Network\{4D36E972-E325-11CE-BFC1-08002BE10318}"
   partial_path = regOps.discoverSubkeys(key, path_to_adapter)
@@ -109,6 +123,8 @@ def getDNS():
 
 
 def getImageFilesOptions():
+  """Returns a list with suspect IFEO's, or None if nothing is found"""
+  
   key = "HKEY_LOCAL_MACHINE"
   IFEO = "Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options"
   subkeys = regOps.discoverSubkeys(key, IFEO)
@@ -121,6 +137,8 @@ def getImageFilesOptions():
 
 
 def getHosts():
+  """Returns the 15 first valid lines (not blank or starting with #) of the
+  hosts file"""
   try:
     fp = open(getenv("WINDIR") + "\System32\drivers\etc\hosts", "r")
   except IOError:
@@ -129,7 +147,7 @@ def getHosts():
   i = 0
   lines = []
   line = fp.readline()
-  while i < 10 and line != "":
+  while i < 15 and line != "":
     if not line.startswith("#") and not line.startswith("\n"):
       lines.append(line)
       i += 1
