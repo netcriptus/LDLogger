@@ -7,19 +7,17 @@ Created by Urlan Barros on 2012-04-18.
 Copyright (c) 2012 __8bitsweb__. All rights reserved.
 """
 
-VERSION = "1.5 Beta"
-
 import sys
 from platform import win32_ver, architecture
 from lists import *
 from utils import regOps, processes, services, drivers, printer, commandHandler, errorHandler, smartStr
 
-class LDLogger:
+class LDLogger(object):
   def __init__(self, version):
      self.version = version
 
-  def executeLDLogger():
-    output = printer.Printer("LDLogger.txt", VERSION)
+  def executeLDLogger(self, lists):
+    output = printer.Printer("LDLogger.txt", self.version)
     output.printVersion()
   
     try:
@@ -31,7 +29,7 @@ class LDLogger:
   
     try:
       # Getting used browsers and their versions
-      browser_list = processes.getBrowsers(BROWSERS)
+      browser_list = processes.getBrowsers(lists["BROWSERS"])
     except Exception as err:
       errorHandler.logError("browsers", err)
   
@@ -71,7 +69,7 @@ class LDLogger:
   
     try:
       # Getting some important keys in register
-      regs = regOps.getRegs(REG_KEYS)
+      regs = regOps.getRegs(lists["REG_KEYS"])
     except Exception as err:
       errorHandler.logError("registry keys", err)
     
@@ -101,19 +99,19 @@ class LDLogger:
     
     try:
       # Getting Services
-      svcs = drivers.getServices(services_whitelist)
+      svcs = drivers.getServices(lists["services_whitelist"])
     except Exception as err:
       errorHandler.logError("services", err)
     
     try:
       # Getting Drivers
-      drvs = drivers.getDrivers(drivers_whitelist)
+      drvs = drivers.getDrivers(lists["drivers_whitelist"])
     except Exception as err:
       errorHandler.logError("drivers", err)
     
     try:
       # Searching for anomalies on svchost
-      anomalies = services.getSvchostAnomalies(svchost_whitelist)
+      anomalies = services.getSvchostAnomalies(lists["svchost_whitelist"])
     except Exception as err:
       errorHandler.logError("svchost", err)
     
@@ -131,7 +129,7 @@ class LDLogger:
   
     try:
       # Getting strange winlogon entries
-      winlogon_entries = services.getWinlogonEntries(winlogon_whitelist)
+      winlogon_entries = services.getWinlogonEntries(lists["winlogon_whitelist"])
     except Exception as err:
       errorHandler.logError("winlogon", err)
   
@@ -143,7 +141,7 @@ class LDLogger:
   
     try:
       # Getting file extension association
-      misassociations = services.checkAssociations(associations)
+      misassociations = services.checkAssociations(lists["associations"])
     except Exception as err:
       errorHandler.logError("file association", err)
   
