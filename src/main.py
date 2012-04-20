@@ -9,12 +9,9 @@ Copyright (c) 2011 __8bitsweb__. All rights reserved.
 
 VERSION = "2.0 Beta"
 
-# TODO: I need to verify what libs are necessary inside main.py
-
 import sys
-from platform import win32_ver, architecture
 from lists import *
-from utils import ldlogger, regOps, processes, services, drivers, printer, commandHandler, errorHandler, smartStr
+from utils import ldlogger, errorHandler
 
 lists = {}
 
