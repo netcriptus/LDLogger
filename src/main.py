@@ -11,6 +11,7 @@ VERSION = "2.0 Beta"
 
 import sys
 from lists import *
+from ctypes import *
 from utils import ldlogger, errorHandler
 
 lists = {}
@@ -26,12 +27,19 @@ try:
 except Exception as err:
   errorHandler.logError("List instantiation", err)
 
-  
+# Verify if the program is running with administrator privileges
+def verifyUserPrivilegesd():
+  if 1 == windll.shell32.IsUserAnAdmin():
+    print "Execute o programa com privilégios de administrator"
+    sys.exit(2)
+
 def main(argv):  
 
   # it's just a test
   logger = ldlogger.LDLogger(VERSION)
   logger.executeLDLogger(lists)
+
+  commandHandler.execute("start notepad LDLogger.txt")
 
   return 0
 

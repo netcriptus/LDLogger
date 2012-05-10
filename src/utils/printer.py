@@ -24,26 +24,26 @@ class Printer(object):
     self.output.write("\n#===== %s =====#\n\n" % title)
   
   def systemInfo(self, OS, build, service_pack, arch):
-    self.sessionTitle("System")
+    self.sessionTitle("Sistema")
     self.output.write("SO: %s Build: %s\n" % (OS, build))
     self.output.write("Service Pack %s Arquitetura: %s\n" % (service_pack, arch))
   
   
   def browsers(self, browser_list):
-    self.sessionTitle("BROWSERS")
+    self.sessionTitle("Navegadores")
     for browser in browser_list:
       if browser[1]:
         self.output.write("%s => %s\n" % (browser[0], browser[1]))
   
   
   def runningProcesses(self, processes_list):
-    self.sessionTitle("Running Processes")
+    self.sessionTitle("Processos sendo executados")
     for process in processes_list:
       self.output.write(process)
   
   
   def hosts(self, hosts_file):
-    self.sessionTitle("HOSTS")
+    self.sessionTitle("Hosts")
     for host in hosts_file:
       self.output.write("%s\n" % host.strip())
   
@@ -65,7 +65,7 @@ class Printer(object):
   
   def registers(self, regs, IEComponents, IEToolbars, global_startups, user_startups,
                 LSPs, primaryDNS, secondaryDNS, adapterID, winlogon_entries):
-    self.sessionTitle("Registry Keys")
+    self.sessionTitle("Chaves de registro")
     self.BHO(IEComponents)
     self.IEToolbars(IEToolbars)
     for reg in regs:
@@ -87,15 +87,15 @@ class Printer(object):
   
   def DNS(self, primaryDNS, secondaryDNS, adapterID):
     if not primaryDNS:
-      self.output.write("No network adapter found\n")
+      self.output.write("Nenhum adaptador de rede encontrado\n")
     else:
-      self.output.write("TCPIP - %s - NAMESERVER: %s, %s\n" % (adapterID, primaryDNS, secondaryDNS))
+      self.output.write("TCPIP - %s - Servidores DNS: %s, %s\n" % (adapterID, primaryDNS, secondaryDNS))
   
   
   def autoruns(self, autoruns_list):
     if autoruns_list:
       for autorun in autoruns_list:
-        self.output.write("Autorun: %s\\ Autorun present!\n" % autorun)
+        self.output.write("Autorun: %s\\ Autorun presente!\n" % autorun)
       self.output.write("\n\n")
   
   
@@ -112,7 +112,7 @@ class Printer(object):
         self.output.write(svc)
         self.output.write("\n")
     else:
-      self.output.write("Nothing unusual\n")
+      self.output.write("Nada não usual\n")
   
   
   def drivers(self, drvs):
@@ -122,13 +122,13 @@ class Printer(object):
         self.output.write(drv)
         self.output.write("\n")
     else:
-      self.output.write("Nothing unusual\n")
+      self.output.write("Nada não usual\n")
     self.output.write("\n\n")
   
   
   def SVCHOST(self, anomalies):
     if len(anomalies) == 0:
-      self.output.write("NetSvc: No anomalies were found\n\n")
+      self.output.write("NetSvc: Nenhuma anomalia encontrada\n\n")
     else:
       for anomalie in anomalies:
         self.output.write("NetSvc: {0} - {1}\n".format(str(anomalie[0]), str(anomalie[1])))
@@ -155,7 +155,7 @@ class Printer(object):
   def winlogon(self, winlogon_entries):
     if winlogon_entries:
       for entry in winlogon_entries:
-        self.output.write("Notify: %s => %s\n" % (entry[0], entry[1]))
+        self.output.write("Notificação: %s => %s\n" % (entry[0], entry[1]))
   
   
   def IFEO(self, files):
@@ -166,7 +166,7 @@ class Printer(object):
   
   
   def fileAssociation(self, misassociations):
-    self.sessionTitle("File Association")
+    self.sessionTitle("Associação de arquivo")
     if misassociations:
       for misassociation in misassociations:
         self.output.write("HKLM\..\%s: %s\n" % (misassociation[0], misassociation[1]))
