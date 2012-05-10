@@ -28,12 +28,14 @@ except Exception as err:
   errorHandler.logError("List instantiation", err)
 
 # Verify if the program is running with administrator privileges
-def verifyUserPrivilegesd():
+def verifyUserPrivileges():
   if 1 == windll.shell32.IsUserAnAdmin():
     print "Execute o programa com privilégios de administrator"
     sys.exit(2)
 
 def main(argv):  
+
+  verifyUserPrivileges()
 
   # it's just a test
   logger = ldlogger.LDLogger(VERSION)
