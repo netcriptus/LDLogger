@@ -12,6 +12,12 @@ from platform import win32_ver, architecture
 from lists import *
 from utils import regOps, processes, services, drivers, printer, commandHandler, errorHandler, smartStr
 
+class LDLogger(object):
+  
+  def __init__(self, output, version):
+    self.output = open(output, "w")
+    self.version = version
+
   # Getting used browsers and their versions
   def getBrowsersList(self, lists):
     try:
