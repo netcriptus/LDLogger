@@ -12,7 +12,7 @@ VERSION = "2.0 Beta"
 import sys
 from lists import *
 from ctypes import *
-from utils import ldlogger, errorHandler
+from utils import ldlogger, errorHandler, commandHandler
 
 lists = {}
 
