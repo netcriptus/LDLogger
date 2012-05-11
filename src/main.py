@@ -29,7 +29,7 @@ except Exception as err:
 
 # Verify if the program is running with administrator privileges
 def verifyUserPrivileges():
-  if 1 == windll.shell32.IsUserAnAdmin():
+  if 1 != windll.shell32.IsUserAnAdmin():
     print "Execute o programa com privilégios de administrator"
     sys.exit(2)
 
