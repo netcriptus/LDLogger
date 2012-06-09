@@ -44,18 +44,13 @@ def userHasAdministratorPrivileges():
     print "Executando o LDLogger com privilégios de administrador."
     print " "
     executeLDLoggerAsAdministrator()
-    #exit(1)
 
-# Execute LDLogger
+# Execute LDLogger as administrator
 #
 def executeLDLoggerAsAdministrator():
-    #retcode = call(['runas', '/user:urias', 'python main.py'])
-    #print "retcode", retcode
-  if 0 != call(['runas', '/user:administrador', 'python main.py']):
+  if 0 != call(['runas', '/user:administrador', 'ldlogger.exe']):
     print >>sys.stderr, "Falha ao tentar executar o programa com o usuário adminstrador."
     exit(1)
-  #  stderr=subprocess.STDOUT
-   # print stderr
   
 def main(argv):
   
