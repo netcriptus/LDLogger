@@ -10,6 +10,9 @@ Copyright (c) 2011 __8bitsweb__. All rights reserved.
 VERSION = "2.0 Beta"
 
 import sys
+import os
+from subprocess import call
+import subprocess
 from lists import *
 from ctypes import *
 from utils import ldlogger, errorHandler, commandHandler
@@ -30,16 +33,34 @@ def instantiateLists():
   return lists
 
 
-def userIsAdmin():
-  """Verify if the program is running with administrator privileges"""
-  return windll.shell32.IsUserAnAdmin()
+# Verifies if the user that is executing LDLogger has administrator
+# privileges. To do so, it's verified if the user has write
+# permission on C:\Windows\system. If the user does not have permission,
+# the program will call the method executeLDLoggerAsAdministrator().
+def userHasAdministratorPrivileges():
+  if not os.access("C:\Windows\system", os.W_OK):
+    print " "
+    print "O programa está sendo executado sem privilégios de administrador."
+    print "Executando o LDLogger com privilégios de administrador."
+    print " "
+    executeLDLoggerAsAdministrator()
+    #exit(1)
 
-
-def main(argv):  
+# Execute LDLogger
+#
+def executeLDLoggerAsAdministrator():
+    #retcode = call(['runas', '/user:urias', 'python main.py'])
+    #print "retcode", retcode
+  if 0 != call(['runas', '/user:administrador', 'python main.py']):
+    print >>sys.stderr, "Falha ao tentar executar o programa com o usuário adminstrador."
+    exit(1)
+  #  stderr=subprocess.STDOUT
+   # print stderr
   
-  if not userIsAdmin():
-    # place a visual error message here
-    return 1
+def main(argv):
+  
+  userHasAdministratorPrivileges()
+
   lists = instantiateLists()
   # it's just a test
   logger = ldlogger.LDLogger(VERSION)

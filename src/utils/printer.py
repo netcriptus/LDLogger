@@ -39,7 +39,8 @@ class Printer(object):
   def runningProcesses(self, processes_list):
     self.sessionTitle("Processos sendo executados")
     for process in processes_list:
-      self.output.write(process)
+      if process != '\n':
+        self.output.write(process)
   
   
   def hosts(self, hosts_file):
@@ -89,7 +90,7 @@ class Printer(object):
     if not primaryDNS:
       self.output.write("Nenhum adaptador de rede encontrado\n")
     else:
-      self.output.write("TCPIP - %s - Servidores DNS: %s, %s\n" % (adapterID, primaryDNS, secondaryDNS))
+      self.output.write("TCP/IP - %s - Servidores DNS: %s, %s\n" % (adapterID, primaryDNS, secondaryDNS))
   
   
   def autoruns(self, autoruns_list):

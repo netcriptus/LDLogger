@@ -8,6 +8,7 @@ Copyright (c) 2012 __8bitsweb__. All rights reserved.
 """
 
 import sys
+import platform
 from platform import win32_ver, architecture
 from lists import *
 from utils import regOps, processes, services, drivers, printer, errorHandler, smartStr
@@ -21,6 +22,7 @@ class LDLogger(object):
   def getBrowsersList(self, lists):
     try:
       browsers_list = processes.getBrowsers(lists["BROWSERS"])
+
       return browsers_list
     except Exception as err:
       errorHandler.logError("navegadores", err)
@@ -31,6 +33,7 @@ class LDLogger(object):
       running_processes_list = []
       for process_path in processes.running_processes():
         running_processes_list.append("%s\n" % process_path)
+
       return running_processes_list
     except Exception as err:
       errorHandler.logError("running processes", err)
@@ -39,6 +42,7 @@ class LDLogger(object):
   def getHostsFile(self):
     try:
       hosts = services.getHosts()
+
       return hosts
     except Exception as err:
       errorHandler.logError("hosts", err)
@@ -51,6 +55,7 @@ class LDLogger(object):
       target_reg = {"key": "HKEY_CLASSES_ROOT",
                   "subkey": "CLSID\%s\InprocServer32"}
       IEComponents = processes.getComponents(source_reg, target_reg)
+
       return IEComponents
     except Exception as err:
       errorHandler.logError("IE components", err)
@@ -63,6 +68,7 @@ class LDLogger(object):
       target_reg = {"key": "HKEY_CLASSES_ROOT",
                     "subkey": "CLSID\%s\InprocServer32"}
       IEToolbars = processes.getComponents(source_reg, target_reg, as_subkeys=False)
+
       return IEToolbars
     except Exception as err:
       errorHandler.logError("IE toolbars", err)
@@ -72,6 +78,7 @@ class LDLogger(object):
   def getKeysFromRegister(self, lists):
     try:
       regs = regOps.getRegs(lists["REG_KEYS"])
+
       return regs
     except Exception as err:
       errorHandler.logError("registry keys", err)
@@ -80,6 +87,7 @@ class LDLogger(object):
   def getAutoruns(self):
     try:
       autoruns = drivers.searchAutorun()
+
       return autoruns
     except Exception as err:
       errorHandler.logError("autoruns", err)
@@ -88,6 +96,7 @@ class LDLogger(object):
   def getMountpoints(self):
     try:
       suspect_mountpoints = drivers.getMountpoints()
+
       return suspect_mountpoints
     except Exception as err:
       errorHandler.logError("mountpoints", err)
@@ -96,6 +105,7 @@ class LDLogger(object):
   def getServices(self, lists):
     try:
       svcs = drivers.getServices(lists["services_whitelist"])
+
       return svcs
     except Exception as err:
       errorHandler.logError("services", err)
@@ -104,6 +114,7 @@ class LDLogger(object):
   def getDrivers(self, lists):
     try:
       drvs = drivers.getDrivers(lists["drivers_whitelist"])
+
       return drvs
     except Exception as err:
       errorHandler.logError("drivers", err)
@@ -113,6 +124,7 @@ class LDLogger(object):
   def searchForAnomaliesOnSvchost(self, lists):
     try:
       anomalies = services.getSvchostAnomalies(lists["svchost_whitelist"])
+
       return anomalies
     except Exception as err:
       errorHandler.logError("svchost", err)
@@ -121,6 +133,7 @@ class LDLogger(object):
   def discoveringSafeBoot(self):
     try:
       safeboot = services.safeBootExists()
+
       return safeboot
     except Exception as err:
       errorHandler.logError("safe boot", err)
@@ -129,6 +142,7 @@ class LDLogger(object):
   def getWinlogonEntries(self, lists):
     try:
       winlogon_entries = services.getWinlogonEntries(lists["winlogon_whitelist"])
+
       return winlogon_entries
     except Exception as err:
       errorHandler.logError("winlogon", err)
@@ -137,6 +151,7 @@ class LDLogger(object):
   def getImageFilesOptions(self):
     try:
       files = services.getImageFilesOptions()
+
       return files
     except Exception as err:
       errorHandler.logError("image file execution", err)
@@ -145,6 +160,7 @@ class LDLogger(object):
   def checkAssociations(self, lists):
     try:
       misassociations = services.checkAssociations(lists["associations"])
+
       return misassociations
     except Exception as err:
       errorHandler.logError("file association", err)
@@ -154,10 +170,11 @@ class LDLogger(object):
     try:
       # Getting OS name, build, service pack, and architecture
       OS, build, service_pack = win32_ver()[:-1]
-      arch = architecture()[0]
+     # arch = architecture()[0]
+      arch = platform.uname()[4]
     except Exception as err:
       errorHandler.logError("platform use", err)
-  
+
     browser_list = self.getBrowsersList(lists)
 
     running_processes_list = []
@@ -207,8 +224,8 @@ class LDLogger(object):
     misassociations = self.checkAssociations(lists)
 
     output = printer.Printer("LDLogger.txt", self.version)
-    output.printVersion()  
-  
+    output.printVersion()
+
     try:
       # This is where we print the results we've got
       output.systemInfo(OS, build, service_pack, arch)
