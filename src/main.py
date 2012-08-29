@@ -46,7 +46,6 @@ def instantiateLists():
 #
 # return has_administrator_privileges
 def userHasAdministratorPrivileges():
-<<<<<<< HEAD
   try:
   # only windows users with admin privileges can read the C:\windows\temp
     temp = os.listdir(os.sep.join([os.environ.get('SystemRoot','C:\windows'),'temp']))
@@ -144,22 +143,6 @@ def verifyDirectoryToSaveLog(argv):
 
 
 # Main function that executes LDLogger.
-=======
-  if not os.access("C:\Windows\system", os.W_OK):
-    print " "
-    print "O programa está sendo executado sem privilégios de administrador."
-    print "Executando o LDLogger com privilégios de administrador."
-    print " "
-    executeLDLoggerAsAdministrator()
-
-# Execute LDLogger as administrator
-#
-def executeLDLoggerAsAdministrator():
-  if 0 != call(['runas', '/user:administrador', 'ldlogger.exe']):
-    print >>sys.stderr, "Falha ao tentar executar o programa com o usuário adminstrador."
-    exit(1)
-  
->>>>>>> 9c2005cde20be733a1b15859c0d5cbc7a47b4318
 def main(argv):
 
   dir_to_save_log = verifyDirectoryToSaveLog(argv)
