@@ -109,4 +109,8 @@ REG_KEYS = [{"key": "HKEY_CURRENT_USER",
              "subkey": "SOFTWARE\Microsoft\Windows NT\CurrentVersion\Windows",
              "values": ["AppInit_DLLs"],
              "tag": "AppInitDLL - "},
+            {"key": "HKEY_CURRENT_USER",
+             "subkey": "Control Panel\Desktop\MultiUILanguageId",
+             "values": [],
+             "tag": ""},
             ]

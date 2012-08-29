@@ -9,9 +9,11 @@ Copyright (c) 2012 __8bitsweb__. All rights reserved.
 
 import sys
 import platform
+import subprocess
 from platform import win32_ver, architecture
 from lists import *
 from utils import regOps, processes, services, drivers, printer, errorHandler, smartStr
+from subprocess import call
 
 class LDLogger(object):
   
@@ -165,8 +167,19 @@ class LDLogger(object):
     except Exception as err:
       errorHandler.logError("file association", err)
 
+  # Determine Java version
+  def determineJavaVersion(self, arch):
+    try:
+
+      java_version = subprocess.Popen(['java','-version'], stdout = subprocess.PIPE, stdin = subprocess.PIPE, stderr = subprocess.PIPE).stderr.read()
+
+      return java_version
+    except OSError, e:
+      errorHandler.logError("Java version", e)
+    
+
   # Executing LDLogger
-  def executeLDLogger(self, lists):  
+  def executeLDLogger(self, lists, dir_to_save_log):
     try:
       # Getting OS name, build, service pack, and architecture
       OS, build, service_pack = win32_ver()[:-1]
@@ -174,6 +187,8 @@ class LDLogger(object):
       arch = platform.uname()[4]
     except Exception as err:
       errorHandler.logError("platform use", err)
+
+    java_version = self.determineJavaVersion(arch)
 
     browser_list = self.getBrowsersList(lists)
 
@@ -223,13 +238,14 @@ class LDLogger(object):
   
     misassociations = self.checkAssociations(lists)
 
-    output = printer.Printer("LDLogger.txt", self.version)
+    output = printer.Printer(dir_to_save_log+"\LDLogger.txt", self.version)
     output.printVersion()
 
     try:
       # This is where we print the results we've got
       output.systemInfo(OS, build, service_pack, arch)
       output.browsers(browser_list)
+      output.javaVersion(java_version)
       output.runningProcesses(running_processes_list)
       output.hosts(hosts)
       output.registers(regs, IEComponents, IEToolbars, global_startups, user_startups, LSPs, primaryDNS,
@@ -242,6 +258,9 @@ class LDLogger(object):
       output.safeboot(safeboot)
       output.IFEO(files_options)
       output.fileAssociation(misassociations)
+
+      output.writeCurrentPath()
+      
       output.finishLog()
     except Exception as err:
       errorHandler.logError("write output", err)

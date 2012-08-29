@@ -27,3 +27,11 @@ def getOutput(command):
   except Exception as err:
     errorHandler.logError("getOutput of %s " % str(command), err)
     return ""
+
+def executeAsUser(command, user):
+  """Given a command and an user, it should be executed and show no return.
+  If an error is generated, it should be logged"""
+  try:
+    subprocess.call(['runas', 'user:'+user, command], shell=True)
+  except Exception as err:
+    errorHandler.errorLog("executing %s " % str(command), err)

@@ -107,7 +107,7 @@ class Printer(object):
   
   
   def services(self, svcs):
-    self.sessionTitle("Services")
+    self.sessionTitle("Serviços")
     if svcs:
       for svc in svcs:
         self.output.write(svc)
@@ -184,4 +184,17 @@ class Printer(object):
     self.output.write(" %02.d/%02.d/%02.d %02.d:%02.d:%02.d" % (hour.day, hour.month, hour.year, hour.hour, hour.minute, hour.second))
     self.output.write("\n\n*********************** Fim do log ***********************\n\n")
     self.output.close()
+
   
+  def javaVersion(self, java_version):
+    self.sessionTitle("Versão do Java")
+    self.output.write("%s\n" % (java_version))
+    self.output.write("\n")
+
+
+  def writeCurrentPath(self):
+    import os
+
+    self.sessionTitle("Caminho atual")
+    self.output.write("%s\n" % (os.getcwd()))
+    self.output.write("\n")
